@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: JobFinder
+  threads:
+    virtual:
+      enabled: true
+

@@ -1,17 +1,18 @@
 package com.jobfinder.infrastructure.offer;
 
+import com.jobfinder.domain.offer.OfferFacade;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-class OfferRestController {
+public class OfferRestController {
 
 //    private final OfferFacade offerFacade;
 //
-//    @PostMapping
-//    public ResponseEntity<OfferResponseDto> createOffer(@RequestBody OfferDto requestDto) {
-//        offerFacade.saveOffer(requestDto);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//    @GetMapping("/offers")
+//    public String createOffer() {
+//        return "ENDPOINT OK";
 //    }
 }
