@@ -23,7 +23,7 @@ class OfferFetcherRestTemplateConfig {
                 .build();
     }
 
-    @Bean
+@Bean("offerFetchableRestTemplate")
     public OfferFetchable offerFetchable(
             RestTemplate restTemplate,
             @Value("${offer.fetcher.rest.template.config.uri}") String baseUrl,

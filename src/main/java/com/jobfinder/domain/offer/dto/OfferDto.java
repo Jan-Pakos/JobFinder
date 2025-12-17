@@ -5,10 +5,8 @@ import lombok.Builder;
 @Builder
 public record OfferDto(
         String title,
-        String description,
-        String companyName,
-        String location,
-        String salaryRange,
-        String url
+        String company,
+        String salary,
+        String offerUrl
 ) {
 }

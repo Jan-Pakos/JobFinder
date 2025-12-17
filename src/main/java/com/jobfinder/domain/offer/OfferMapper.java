@@ -8,22 +8,18 @@ public class OfferMapper {
     public static OfferDto mapOfferToOfferDto(Offer offer) {
         return OfferDto.builder()
                 .title(offer.title())
-                .description(offer.description())
-                .companyName(offer.companyName())
-                .location(offer.location())
-                .salaryRange(offer.salaryRange())
-                .url(offer.url())
+                .company(offer.companyName())
+                .salary(offer.salaryRange())
+                .offerUrl(offer.url())
                 .build();
     }
 
     public static Offer mapOfferDtoToOffer(OfferDto offerDto) {
         return Offer.builder()
                 .title(offerDto.title())
-                .description(offerDto.description())
-                .companyName(offerDto.companyName())
-                .location(offerDto.location())
-                .salaryRange(offerDto.salaryRange())
-                .url(offerDto.url())
+                .companyName(offerDto.company())
+                .salaryRange(offerDto.salary())
+                .url(offerDto.offerUrl())
                 .build();
     }
 
