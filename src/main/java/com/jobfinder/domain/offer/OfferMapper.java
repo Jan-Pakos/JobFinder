@@ -29,25 +29,19 @@ public class OfferMapper {
 
     public static OfferResponseDto mapOfferToOfferResponseDto(Offer offer) {
         return OfferResponseDto.builder()
-                .id(offer.id())
                 .title(offer.title())
-                .description(offer.description())
-                .companyName(offer.companyName())
-                .location(offer.location())
-                .salaryRange(offer.salaryRange())
-                .url(offer.url())
+                .company(offer.companyName())
+                .salary(offer.salaryRange())
+                .offerUrl(offer.url())
                 .build();
     }
 
     public static Offer mapFromOfferResponseToOffer(OfferResponseDto offerResponseDto) {
         return Offer.builder()
-                .id(offerResponseDto.id())
                 .title(offerResponseDto.title())
-                .description(offerResponseDto.description())
-                .companyName(offerResponseDto.companyName())
-                .location(offerResponseDto.location())
-                .salaryRange(offerResponseDto.salaryRange())
-                .url(offerResponseDto.url())
+                .companyName(offerResponseDto.company())
+                .salaryRange(offerResponseDto.salary())
+                .url(offerResponseDto.offerUrl())
                 .build();
     }
 }

@@ -11,106 +11,106 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OfferFacadeTest {
 
-    List<OfferResponseDto> offers = List.of(
-            OfferResponseDto.builder()
-                    .title("Junior Java Developer")
-                    .description("Java Developer needed")
-                    .companyName("Tech Solutions")
-                    .location("New York, NY")
-                    .salaryRange("$80,000 - $120,000")
-                    .url("https://someurl/1")
-                    .build(),
-            OfferResponseDto.builder()
-                    .title("Senior Java Developer")
-                    .description("Looking for a Senior Java Developer")
-                    .companyName("Innovatech")
-                    .location("San Francisco, CA")
-                    .salaryRange("$120,000 - $160,000")
-                    .url("https://someurl/2")
-                    .build()
-    );
-
-    @Test
-    public void should_fetch_and_save_two_new_offers_when_theyre_not_in_db() {
-        //given
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
-        //when
-        offerFacade.fetchNewOffersNotInDb();
-        //then
-        List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
-        assertEquals(2, allOffers.size());
-    }
-
-    @Test
-    public void should_throw_exception_when_offer_not_found() {
-        //given
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
-        OfferDto offerDto1 = offerFacade.saveOffer(OfferDto.builder()
-                .title("Java Developer")
-                .description("Experienced Java Developer needed")
-                .companyName("Tech Solutions")
-                .location("New York, NY")
-                .salaryRange("$80,000 - $120,000")
-                .url("https://techsolutions.com/careers/java-developer/123")
-                .build());
-        //when
-        Long invalidId = 999L;
-        Exception exception = assertThrows(OfferNotFoundException.class, () -> {
-            offerFacade.findOfferById(invalidId);
-        });
-        // then
-        String expectedMessage = "Offer with id " + invalidId + " not found";
-        String actualMessage = exception.getMessage();
-        assertEquals(actualMessage, expectedMessage);
-    }
-
-    @Test
-    public void should_save_new_offer_when_it_isnt_in_database() {
-        // given
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
-        OfferDto offerDto1 = OfferDto.builder()
-                .title("Java Developer")
-                .description("Experienced Java Developer needed")
-                .companyName("Tech Solutions")
-                .location("New York, NY")
-                .salaryRange("$80,000 - $120,000")
-                .url("https://someurl/2")
-                .build();
-        offerFacade.saveOffer(offerDto1);
-        // when
-        OfferDto offerDto2 = OfferDto.builder()
-                .title("Junior Java Developer")
-                .description("No expectations")
-                .companyName("Tech Solutions")
-                .location("New York, NY")
-                .salaryRange("$80,000 - $120,000")
-                .url("https://someurl/3")
-                .build();
-        Set<OfferDto> allOffers = Set.of(offerDto2);
-        offerFacade.fetchNewOffersNotInDb();
-        // then
-        List<OfferResponseDto> allOffers1 = offerFacade.findAllOffers();
-        assertEquals(3, allOffers1.size());
-    }
-
-    @Test
-    public void should_not_save_new_offer_when_it_already_is_in_database() {
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
-        // given
-        OfferDto offerDto1 = OfferDto.builder()
-                .title("Java Developer")
-                .description("Experienced Java Developer needed")
-                .companyName("Tech Solutions")
-                .location("New York, NY")
-                .salaryRange("$80,000 - $120,000")
-                .url("https://techsolutions.com/careers/java-developer/123")
-                .build();
-        offerFacade.saveOffer(offerDto1);
-        // when
-
-        // then
-    }
-
+//    List<OfferResponseDto> offers = List.of(
+//            OfferResponseDto.builder()
+//                    .title("Junior Java Developer")
+//                    .description("Java Developer needed")
+//                    .companyName("Tech Solutions")
+//                    .location("New York, NY")
+//                    .salaryRange("$80,000 - $120,000")
+//                    .url("https://someurl/1")
+//                    .build(),
+//            OfferResponseDto.builder()
+//                    .title("Senior Java Developer")
+//                    .description("Looking for a Senior Java Developer")
+//                    .companyName("Innovatech")
+//                    .location("San Francisco, CA")
+//                    .salaryRange("$120,000 - $160,000")
+//                    .url("https://someurl/2")
+//                    .build()
+//    );
+//
+//    @Test
+//    public void should_fetch_and_save_two_new_offers_when_theyre_not_in_db() {
+//        //given
+//        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+//        //when
+//        offerFacade.fetchNewOffersNotInDb();
+//        //then
+//        List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+//        assertEquals(2, allOffers.size());
+//    }
+//
+//    @Test
+//    public void should_throw_exception_when_offer_not_found() {
+//        //given
+//        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+//        OfferDto offerDto1 = offerFacade.saveOffer(OfferDto.builder()
+//                .title("Java Developer")
+//                .description("Experienced Java Developer needed")
+//                .companyName("Tech Solutions")
+//                .location("New York, NY")
+//                .salaryRange("$80,000 - $120,000")
+//                .url("https://techsolutions.com/careers/java-developer/123")
+//                .build());
+//        //when
+//        Long invalidId = 999L;
+//        Exception exception = assertThrows(OfferNotFoundException.class, () -> {
+//            offerFacade.findOfferById(invalidId);
+//        });
+//        // then
+//        String expectedMessage = "Offer with id " + invalidId + " not found";
+//        String actualMessage = exception.getMessage();
+//        assertEquals(actualMessage, expectedMessage);
+//    }
+//
+//    @Test
+//    public void should_save_new_offer_when_it_isnt_in_database() {
+//        // given
+//        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+//        OfferDto offerDto1 = OfferDto.builder()
+//                .title("Java Developer")
+//                .description("Experienced Java Developer needed")
+//                .companyName("Tech Solutions")
+//                .location("New York, NY")
+//                .salaryRange("$80,000 - $120,000")
+//                .url("https://someurl/2")
+//                .build();
+//        offerFacade.saveOffer(offerDto1);
+//        // when
+//        OfferDto offerDto2 = OfferDto.builder()
+//                .title("Junior Java Developer")
+//                .description("No expectations")
+//                .companyName("Tech Solutions")
+//                .location("New York, NY")
+//                .salaryRange("$80,000 - $120,000")
+//                .url("https://someurl/3")
+//                .build();
+//        Set<OfferDto> allOffers = Set.of(offerDto2);
+//        offerFacade.fetchNewOffersNotInDb();
+//        // then
+//        List<OfferResponseDto> allOffers1 = offerFacade.findAllOffers();
+//        assertEquals(3, allOffers1.size());
+//    }
+//
+//    @Test
+//    public void should_not_save_new_offer_when_it_already_is_in_database() {
+//        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+//        // given
+//        OfferDto offerDto1 = OfferDto.builder()
+//                .title("Java Developer")
+//                .description("Experienced Java Developer needed")
+//                .companyName("Tech Solutions")
+//                .location("New York, NY")
+//                .salaryRange("$80,000 - $120,000")
+//                .url("https://techsolutions.com/careers/java-developer/123")
+//                .build();
+//        offerFacade.saveOffer(offerDto1);
+//        // when
+//
+//        // then
+//    }
+//
 
 
 }

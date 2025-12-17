@@ -2,10 +2,8 @@ package com.jobfinder.infrastructure.offer.dto;
 
 public record OfferRequestDto(
         String title,
-        String description,
-        String companyName,
-        String location,
-        String salaryRange,
-        String url
+        String company,
+        String salary,
+        String offerUrl
 ){
 }
