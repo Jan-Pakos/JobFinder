@@ -1,14 +1,14 @@
 package com.jobfinder.domain.offer;
 
-import java.util.Collection;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface OfferRepository {
+@Repository
+public interface OfferRepository extends MongoRepository<Offer, String> {
 
-    Offer save(Offer offer);
-
-    Collection<Offer> findAll();
 
     Optional<Offer> findById(Long id);
 

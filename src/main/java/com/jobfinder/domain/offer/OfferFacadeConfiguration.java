@@ -17,36 +17,6 @@ class OfferFacadeConfiguration {
     }
 
     @Bean
-    public OfferRepository offerRepository(OfferFetchable offerFetchable) {
-        return new OfferRepository() {
-            @Override
-            public Offer save(Offer offer) {
-                return null;
-            }
-
-            @Override
-            public Collection<Offer> findAll() {
-                return List.of();
-            }
-
-            @Override
-            public Optional<Offer> findById(Long id) {
-                return Optional.empty();
-            }
-
-            @Override
-            public boolean existsByUrl(String offerUrl) {
-                return false;
-            }
-
-            @Override
-            public List<Offer> saveAll(List<Offer> newOffers) {
-                return List.of();
-            }
-        };
-    }
-
-    @Bean
     public OfferService offerService(OfferFetchable offerFetchable, OfferRepository offerRepository) {
         return new OfferService(offerRepository, offerFetchable);
     }
