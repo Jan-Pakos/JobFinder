@@ -51,8 +51,8 @@ class OfferFacadeConfiguration {
         return new OfferService(offerRepository, offerFetchable);
     }
 
-    @Bean
-    public OfferFetchable offerFetchable() {
-        return List::of;
-    }
+//    @Bean
+//    public OfferFetchable offerFetchable() {
+//        return List::of;
+//    }
 }

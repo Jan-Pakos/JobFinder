@@ -5,13 +5,18 @@ spring:
     virtual:
       enabled: true
 
+scheduler:
+  enabled: true
+
 offer:
   fetcher:
     rest:
       template:
         config:
-          uri: http://ec2-3-127-218-34.eu-central-1.compute.amazonaws.com:5057/offers
+          uri: http://ec2-3-127-218-34.eu-central-1.compute.amazonaws.com:5057
           port: 5057
           connectionTimeout: 4000
           readTimeout: 4000
+    scheduler:
+        fixedDelay: PT3H  # 10800000 = 3 hours in milliseconds
 

@@ -41,7 +41,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- ✅ Fixed: was spring-boot-starter-webmvc-test -->
+        <!-- spring-boot-starter-webmvc-test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -54,7 +54,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- ✅ Fixed: was testcontainers-junit-jupiter -->
+        <!-- testcontainers-junit-jupiter -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -79,15 +79,20 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- ✅ Updated WireMock -->
+        <!-- WireMock -->
         <dependency>
             <groupId>org.wiremock</groupId>
             <artifactId>wiremock-standalone</artifactId>
             <version>3.10.0</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- ✅ Removed 4 duplicate junit entries - keeping just one -->
+        <!-- https://mvnrepository.com/artifact/org.awaitility/awaitility -->
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.3.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
