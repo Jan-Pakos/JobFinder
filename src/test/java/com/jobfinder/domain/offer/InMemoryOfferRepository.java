@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-class InMemoryOfferRepository implements OfferRepository {
+public class InMemoryOfferRepository implements OfferRepository {
 
     ConcurrentHashMap<Long, Offer> db = new ConcurrentHashMap<>();
     AtomicLong counter = new AtomicLong(0);
