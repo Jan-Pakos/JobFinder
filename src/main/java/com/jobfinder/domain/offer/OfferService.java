@@ -1,7 +1,6 @@
 package com.jobfinder.domain.offer;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,7 +15,8 @@ class OfferService {
         List<Offer> fetchedOffers = fetchOffers();
         List<Offer> newOffers = filterNotExistingOffers(fetchedOffers);
         try {
-            return offerRepository.saveAll(newOffers);
+            newOffers.forEach(offerRepository::save);
+            return newOffers;
         } catch (OfferDuplicateException duplicateKeyException) {
             throw new OfferSavingException(duplicateKeyException.getMessage(), fetchedOffers);
         }

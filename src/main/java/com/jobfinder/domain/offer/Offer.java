@@ -1,14 +1,14 @@
 package com.jobfinder.domain.offer;
 
 import lombok.Builder;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
+@Document
 record Offer(
-        Long id,
+        String id,
         String title,
-        String description,
         String companyName,
-        String location,
         String salaryRange,
         String url
 ) {

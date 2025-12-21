@@ -6,8 +6,12 @@ spring:
       enabled: true
   data:
     mongodb:
-      uri: mongodb://localhost:27017/jobfinder
-      database: jobfinder
+      host: localhost
+      port: 27017
+      database: offers
+      username: root
+      password: example
+      authentication-database: admin
 
 scheduler:
   enabled: true
