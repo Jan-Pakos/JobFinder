@@ -4,6 +4,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  mongodb:
+    uri: mongodb://admin:admin@localhost:27017/jobfinderdb
 
 scheduler:
   enabled: true
