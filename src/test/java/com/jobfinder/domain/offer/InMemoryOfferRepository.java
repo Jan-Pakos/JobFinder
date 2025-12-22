@@ -8,13 +8,15 @@ import org.springframework.data.repository.query.FluentQuery;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class InMemoryOfferRepository implements OfferRepository {
 
-    ConcurrentHashMap<Long, Offer> db = new ConcurrentHashMap<>();
+    ConcurrentHashMap<String, Offer> db = new ConcurrentHashMap<>();
 
 //    @Override
 //    public Offer save(Offer offer) {
@@ -24,14 +26,27 @@ public class InMemoryOfferRepository implements OfferRepository {
 
 
     @Override
-    public <S extends Offer> S save(S entity) {
-        db.put(entity.id(), entity);
-        return entity;
+    public Offer save(Offer entity) {
+        if (db.values().stream().anyMatch(offer -> offer.url().equals(entity.url()))) {
+            throw new OfferDuplicateException(entity.url());
+        }
+        UUID id = UUID.randomUUID();
+        Offer offer = new Offer(
+                id.toString(),
+                entity.title(),
+                entity.companyName(),
+                entity.salaryRange(),
+                entity.url()
+        );
+        db.put(id.toString(), offer);
+        return offer;
     }
 
     @Override
-    public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
-        return List.of();
+    public List<Offer> saveAll(List<Offer> offers) {
+        return offers.stream()
+                .map(this::save)
+                .toList();
     }
 
     @Override
@@ -42,6 +57,11 @@ public class InMemoryOfferRepository implements OfferRepository {
     @Override
     public boolean existsById(String s) {
         return false;
+    }
+
+    @Override
+    public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
+        return List.of();
     }
 
     @Override
@@ -84,19 +104,13 @@ public class InMemoryOfferRepository implements OfferRepository {
 
     }
 
-    @Override
-    public Optional<Offer> findById(Long id) {
-        return Optional.ofNullable(db.get(id));
-    }
 
     @Override
     public boolean existsByUrl(String offerUrl) {
-        return false;
-    }
-
-    @Override
-    public List<Offer> saveAll(List<Offer> offers) {
-        return offers.stream().map(this::save).toList();
+        Set<Offer> collect = db.values().stream().filter(
+                offer -> offer.url().equals(offerUrl))
+                .collect(Collectors.toSet());
+        return !collect.isEmpty();
     }
 
     @Override

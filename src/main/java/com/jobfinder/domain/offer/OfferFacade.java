@@ -25,7 +25,7 @@ public class OfferFacade {
                 .toList();
     }
 
-    public OfferResponseDto findOfferById(Long id) {
+    public OfferResponseDto findOfferById(String id) {
         Offer offer = offerRepository.findById(id).orElseThrow(
                 () -> new OfferNotFoundException("Offer with id " + id + " not found")
         );

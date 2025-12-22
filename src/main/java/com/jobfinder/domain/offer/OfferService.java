@@ -22,6 +22,12 @@ class OfferService {
         }
     }
 
+    private List<Offer> fetchOffers() {
+        return offerFetcher.getNewOffers().stream().map(
+                OfferMapper::mapFromOfferResponseToOffer
+        ).toList();
+    }
+
     private List<Offer> filterNotExistingOffers(List<Offer> jobOffers) {
         return jobOffers.stream()
                 .filter(offerDto -> !offerDto.url().isEmpty())
@@ -29,9 +35,4 @@ class OfferService {
                 .toList();
     }
 
-    private List<Offer> fetchOffers() {
-        return offerFetcher.getNewOffers().stream().map(
-                OfferMapper::mapFromOfferResponseToOffer
-        ).toList();
-    }
 }
