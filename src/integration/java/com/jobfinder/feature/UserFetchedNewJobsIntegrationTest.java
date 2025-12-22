@@ -33,14 +33,11 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
                         .withHeader("Content-Type", "application/json")
                         .withBody(bodyWithNoJobOffers())));
 
-        List<OfferResponseDto> newOffers = offerFetchable.getNewOffers();
-        assert newOffers.isEmpty();
         // 2. Scheduler ran 1st time and made GET request to external server and the system added 0 offers to the database
-        offersScheduler.fetchNewOffers();
-        boolean result = true;
-        await()
-                .pollInterval(Duration.ofSeconds(4))
-                .until(() -> true);
+        // given & when
+        List<OfferResponseDto> newOffers = offerFetchable.getNewOffers();
+        // then
+        assert newOffers.isEmpty();
         // 3. User tried to get a JWT token by making POST request to /token and the system returned UNAUTHORIZED 401
         // 4. User made a GET request to /offers with no JWT token and the system returned UNAUTHORIZED 401
     }

@@ -1,9 +1,12 @@
-db.createUser({
+db.createUser(
+    {
         user: "admin",
         pwd: "admin",
-        roles: [{
-            role: "readWrite",
-            db: "mydatabase"
-        }]
+        roles: [
+            {
+                role: "readWrite",
+                db: "offers"
+            }
+        ]
     }
-);
+)

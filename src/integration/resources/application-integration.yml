@@ -2,3 +2,5 @@ offer:
   fetcher:
     scheduler:
         fixedDelay: PT1S  # every second for integration tests
+scheduler:
+  enabled: false

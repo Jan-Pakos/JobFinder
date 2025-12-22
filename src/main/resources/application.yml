@@ -4,8 +4,14 @@ spring:
   threads:
     virtual:
       enabled: true
-  mongodb:
-    uri: mongodb://admin:admin@localhost:27017/jobfinderdb
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: offers
+      username: root
+      password: example
+      authentication-database: admin
 
 scheduler:
   enabled: true
