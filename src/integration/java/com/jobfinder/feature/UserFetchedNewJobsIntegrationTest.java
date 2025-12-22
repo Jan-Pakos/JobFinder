@@ -26,24 +26,27 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
     @Test
     void userFetchedNewJobs() throws Exception {
         // 1. There are no job offers in the external HTTP server
-
+        // given & when & then
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
                         .withBody(bodyWithNoJobOffers())));
 
+
         // 2. Scheduler ran 1st time and made GET request to external server and the system added 0 offers to the database
         // given & when
         List<OfferResponseDto> newOffers = offerFetchable.getNewOffers();
         // then
         assert newOffers.isEmpty();
+
+
         // 3. User tried to get a JWT token by making POST request to /token and the system returned UNAUTHORIZED 401
         // 4. User made a GET request to /offers with no JWT token and the system returned UNAUTHORIZED 401
         // given
-
+        String url = "/offers";
         // when
-        ResultActions perform = mockMvc.perform(get("/offers").contentType("application/json"));
+        ResultActions perform = mockMvc.perform(get(url).contentType("application/json"));
         // then
         perform.andExpect(status().isOk());
 
