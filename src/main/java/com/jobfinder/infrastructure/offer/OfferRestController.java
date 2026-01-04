@@ -1,16 +1,14 @@
 package com.jobfinder.infrastructure.offer;
 
 import com.jobfinder.domain.offer.OfferFacade;
+import com.jobfinder.domain.offer.dto.OfferDto;
 import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import com.jobfinder.infrastructure.offer.dto.AllOffersResponseDto;
 import com.jobfinder.infrastructure.offer.dto.OfferRequestDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,18 @@ public class OfferRestController {
     @PostMapping("/offers")
     public ResponseEntity<String> postOffer(@RequestBody @Valid OfferRequestDto offerDto) {
         return ResponseEntity.ok("Post request to /offers");
+    }
+
+    @PutMapping("/offers/{id}")
+    public ResponseEntity<String> putOffer(@PathVariable String id, @RequestBody @Valid OfferRequestDto offerDto) {
+        offerFacade.updateWholeOffer();
+        return ResponseEntity.ok("Put request to /offers/{id}");
+    }
+
+    @PatchMapping("/offers/{id}")
+    public ResponseEntity<String> patchOffer(@PathVariable String id, @RequestBody @Valid OfferRequestDto offerRequestDto) {
+        OfferDto offerDto1 = OfferMapper.mapOfferRequestDtoToOffer(offerRequestDto);
+        offerFacade.partiallyUpdateOffer(offerDto1,id);
+        return ResponseEntity.ok("Patch request to /offers/{id}");
     }
 }

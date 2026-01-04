@@ -1,5 +1,6 @@
 package com.jobfinder.domain.offer;
 
+import com.jobfinder.domain.offer.dto.OfferDto;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

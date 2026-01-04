@@ -11,6 +11,7 @@ public class OfferFacade {
 
     private final OfferRepository offerRepository;
     private final OfferService offerService;
+    private final OfferUpdater offerUpdater;
 
     public OfferDto saveOffer(OfferDto dto) {
         Offer offer = OfferMapper.mapOfferDtoToOffer(dto);
@@ -35,5 +36,13 @@ public class OfferFacade {
     public List<OfferResponseDto> fetchNewOffersNotInDb() {
         return offerService.fetchNewOffersNotInDb().stream()
                 .map(OfferMapper::mapOfferToOfferResponseDto).toList();
+    }
+
+    public OfferResponseDto partiallyUpdateOffer(OfferDto offerDto, String id) {
+        return offerUpdater.partiallyUpdateOffer(offerDto, id);
+    }
+
+    public OfferResponseDto updateWholeOffer(OfferDto offerDto, String id) {
+
     }
 }

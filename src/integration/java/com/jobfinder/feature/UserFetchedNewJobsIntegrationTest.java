@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 
 import java.util.List;
 
@@ -44,20 +45,19 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         // 3. User tried to get a JWT token by making POST request to /token and the system returned UNAUTHORIZED 401
         // 4. User made a GET request to /offers with no JWT token and the system returned UNAUTHORIZED 401
         // given
-        String url = "/offers";
+        String urlPath = "/offers";
         // when
-        ResultActions perform = mockMvc.perform(get(url).contentType("application/json"));
+        ResultActions perform = mockMvc.perform(get(urlPath).contentType(MediaType.APPLICATION_JSON.getMediaType()));
         // then
         perform.andExpect(status().isOk());
 
-//        5. The user made a POST request to /register with username=user1 and password=password1 and the system returned OK 200 and JWTtoken=AAAA.BBBB.CCC
-//        6. User made a GET to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 2 offers with ids: 1000 and 2000
-
-//        7. There are 2 new offers on the external HTTP server
-//        8. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
-//        9. User made GET request to /offers and 2 job offers are returned with ids: 1000 and 2000
-//        10. User made a GET request to /offers/9999 and the system returned NOT_FOUND 404 with message “Offer with id 9999 not found”
-//        11. User made GET request to /offers/1000 and the system returned OK 200 with offer with id 1000
+        // 5. The user made a POST request to /register with username=user1 and password=password1 and the system returned OK 200 and JWTtoken=AAAA.BBBB.CCC
+        // 6. There are 2 new offers on the external HTTP server
+        // 7. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
+        // 8. User made a GET to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 2 offers with ids: 1000 and 2000
+        // 9. User made GET request to /offers and 2 job offers are returned with ids: 1000 and 2000
+        // 10. User made a GET request to /offers/9999 and the system returned NOT_FOUND 404 with message “Offer with id 9999 not found”
+        // 11. User made GET request to /offers/1000 and the system returned OK 200 with offer with id 1000
 
 //        ResultActions perform = mockMvc.perform(get("/offers").content(
 //                """
