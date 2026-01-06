@@ -31,9 +31,10 @@ public class OfferRestController {
     }
 
     @PutMapping("/offers/{id}")
-    public ResponseEntity<String> putOffer(@PathVariable String id, @RequestBody @Valid OfferRequestDto offerDto) {
-        offerFacade.updateWholeOffer();
-        return ResponseEntity.ok("Put request to /offers/{id}");
+    public ResponseEntity<OfferResponseDto> putOffer(@PathVariable String id, @RequestBody @Valid OfferRequestDto offerDto) {
+        OfferDto offerDto1 = OfferMapper.mapOfferRequestDtoToOffer(offerDto);
+        OfferResponseDto offerResponseDto = offerFacade.updateWholeOffer(offerDto1, id);
+        return ResponseEntity.ok(offerResponseDto);
     }
 
     @PatchMapping("/offers/{id}")
