@@ -59,16 +59,16 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         // 10. User made a GET request to /offers/9999 and the system returned NOT_FOUND 404 with message “Offer with id 9999 not found”
         // 11. User made GET request to /offers/1000 and the system returned OK 200 with offer with id 1000
 
-//        ResultActions perform = mockMvc.perform(get("/offers").content(
-//                """
-//                        {
-//                            "title": "Java Developer",
-//                            "company": "Company X",
-//                            "salary": "100K",
-//                            "offerUrl": "www.offer.com/1"
-//                        }
-//
-//                        """.trim()).contentType("application/json"));
+        ResultActions performGetOfferWithExistingId = mockMvc.perform(get("/offers/1000").content(
+                """
+                        {
+                            "title": "Java Developer",
+                            "company": "Company X",
+                            "salary": "100K",
+                            "offerUrl": "www.offer.com/1"
+                        }
+
+                        """.trim()).contentType("application/json"));
 //        12. scheduler ran a 3rd time and made a GET request to the external server and the system added 2 new offers with ids: 3000 and 4000 to the database
 //        13. The user made a GET request to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 4 offers with ids: 1000, 2000, 3000, 4000
     }
