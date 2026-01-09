@@ -13,10 +13,10 @@ public class OfferFacade {
     private final OfferService offerService;
     private final OfferUpdater offerUpdater;
 
-    public OfferDto saveOffer(OfferDto dto) {
+    public OfferResponseDto saveOffer(OfferDto dto) {
         Offer offer = OfferMapper.mapOfferDtoToOffer(dto);
         Offer savedOffer = offerRepository.save(offer);
-        return OfferMapper.mapOfferToOfferDto(savedOffer);
+        return OfferMapper.mapOfferToOfferResponseDto(savedOffer);
     }
 
     public List<OfferResponseDto> findAllOffers() {

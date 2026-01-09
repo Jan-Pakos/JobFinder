@@ -14,6 +14,7 @@ import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements SampleJobOffersJsonBodies {
@@ -70,6 +71,19 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
                         """.trim()).contentType("application/json"));
 //        12. scheduler ran a 3rd time and made a GET request to the external server and the system added 2 new offers with ids: 3000 and 4000 to the database
+        // 13. User made a POST request with header “Authorization: Bearer AAAA.BBBB.CCC” and JSON body with offer details to /offers and the system returned OK 200 with the offer with id: 5000
+        mockMvc.perform(post("/offers").content(
+                """
+                        {
+                            "title": "DevOps Engineer",
+                            "company": "Company Y",
+                            "salary": "120K",
+                            "offerUrl": "www.offer.com/5"
+                        }
+
+                        """.trim()).contentType("application/json").header("Authorization", "Bearer AAAA.BBBB.CCC"))
+                .andExpect(status().isCreated());
+
 //        13. The user made a GET request to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 4 offers with ids: 1000, 2000, 3000, 4000
     }
 }

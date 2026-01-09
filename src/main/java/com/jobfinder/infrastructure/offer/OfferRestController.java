@@ -4,16 +4,21 @@ import com.jobfinder.domain.offer.OfferFacade;
 import com.jobfinder.domain.offer.dto.OfferDto;
 import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import com.jobfinder.infrastructure.offer.dto.AllOffersResponseDto;
+import com.jobfinder.infrastructure.offer.dto.OfferPatchRequestDto;
 import com.jobfinder.infrastructure.offer.dto.OfferRequestDto;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Validated
 public class OfferRestController {
 
     private final OfferFacade offerFacade;
@@ -26,8 +31,11 @@ public class OfferRestController {
     }
 
     @PostMapping("/offers")
-    public ResponseEntity<String> postOffer(@RequestBody @Valid OfferRequestDto offerDto) {
-        return ResponseEntity.ok("Post request to /offers");
+    public ResponseEntity<OfferResponseDto> postOffer(
+            @RequestBody(required = true) @Valid @NotNull OfferRequestDto offerDto) {
+        OfferDto offerDto1 = OfferMapper.mapOfferRequestDtoToOffer(offerDto);
+        OfferResponseDto offerResponseDto = offerFacade.saveOffer(offerDto1);
+        return ResponseEntity.status(HttpStatus.CREATED).body(offerResponseDto);
     }
 
     @PutMapping("/offers/{id}")
@@ -38,8 +46,8 @@ public class OfferRestController {
     }
 
     @PatchMapping("/offers/{id}")
-    public ResponseEntity<String> patchOffer(@PathVariable String id, @RequestBody @Valid OfferRequestDto offerRequestDto) {
-        OfferDto offerDto1 = OfferMapper.mapOfferRequestDtoToOffer(offerRequestDto);
+    public ResponseEntity<String> patchOffer(@PathVariable String id, @RequestBody @Valid OfferPatchRequestDto offerRequestDto) {
+        OfferDto offerDto1 = OfferMapper.mapOfferPatchRequestDtoToOffer(offerRequestDto);
         offerFacade.partiallyUpdateOffer(offerDto1,id);
         return ResponseEntity.ok("Patch request to /offers/{id}");
     }
