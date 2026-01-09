@@ -26,7 +26,7 @@ class OfferRestControllerErrorHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseBody
     public OfferErrorResponseDto handleDuplicateKeyException(DuplicateKeyException ex) {
-        final String message = "Duplicate key error: " + ex.getMessage();
+        final String message = "Offer with given url already exists in the database.";
         log.error(message);
         return new OfferErrorResponseDto(message, HttpStatus.CONFLICT);
     }
