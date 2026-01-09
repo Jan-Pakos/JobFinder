@@ -44,13 +44,6 @@ public class InMemoryOfferRepository implements OfferRepository {
     }
 
     @Override
-    public List<Offer> saveAll(List<Offer> offers) {
-        return offers.stream()
-                .map(this::save)
-                .toList();
-    }
-
-    @Override
     public Optional<Offer> findById(String s) {
         return Optional.empty();
     }
