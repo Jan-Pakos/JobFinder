@@ -1,10 +1,8 @@
 package com.jobfinder.domain.offer;
 
-import com.jobfinder.domain.offer.dto.OfferDto;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-
 
 @AllArgsConstructor
 class OfferService {
@@ -15,12 +13,9 @@ class OfferService {
     List<Offer> fetchNewOffersNotInDb() {
         List<Offer> fetchedOffers = fetchOffers();
         List<Offer> newOffers = filterNotExistingOffers(fetchedOffers);
-        try {
-            newOffers.forEach(offerRepository::save);
-            return newOffers;
-        } catch (OfferDuplicateException duplicateKeyException) {
-            throw new OfferSavingException(duplicateKeyException.getMessage(), fetchedOffers);
-        }
+        newOffers.forEach(offerRepository::save);
+        return newOffers;
+
     }
 
     private List<Offer> fetchOffers() {
