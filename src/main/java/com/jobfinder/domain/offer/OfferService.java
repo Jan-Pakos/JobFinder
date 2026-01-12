@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-
 @AllArgsConstructor
 class OfferService {
 
@@ -14,12 +13,20 @@ class OfferService {
     List<Offer> fetchNewOffersNotInDb() {
         List<Offer> fetchedOffers = fetchOffers();
         List<Offer> newOffers = filterNotExistingOffers(fetchedOffers);
-        try {
-            newOffers.forEach(offerRepository::save);
-            return newOffers;
-        } catch (OfferDuplicateException duplicateKeyException) {
-            throw new OfferSavingException(duplicateKeyException.getMessage(), fetchedOffers);
+        newOffers.forEach(offerRepository::save);
+        return newOffers;
+
+    }
+
+    Offer save(Offer offer) {
+        if(offerExistsByUrl(offer.url())) {
+            throw new OfferDuplicateException("Offer with url " + offer.url() + " already exists");
         }
+        return offerRepository.save(offer);
+    }
+
+    private boolean offerExistsByUrl(String url) {
+        return offerRepository.existsByUrl(url);
     }
 
     private List<Offer> fetchOffers() {

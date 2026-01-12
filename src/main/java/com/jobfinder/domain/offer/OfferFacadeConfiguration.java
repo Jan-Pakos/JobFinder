@@ -12,8 +12,8 @@ import java.util.Optional;
 class OfferFacadeConfiguration {
 
     @Bean
-    public OfferFacade offerFacade(OfferRepository offerRepository, OfferService offerService) {
-        return new OfferFacade(offerRepository, offerService);
+    public OfferFacade offerFacade(OfferRepository offerRepository, OfferService offerService, OfferUpdater offerUpdater) {
+        return new OfferFacade(offerRepository, offerService, offerUpdater);
     }
 
     @Bean

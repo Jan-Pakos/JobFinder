@@ -11,11 +11,13 @@ public class OfferFacade {
 
     private final OfferRepository offerRepository;
     private final OfferService offerService;
+    private final OfferUpdater offerUpdater;
 
-    public OfferDto saveOffer(OfferDto dto) {
+    public OfferResponseDto saveOffer(OfferDto dto) {
         Offer offer = OfferMapper.mapOfferDtoToOffer(dto);
-        Offer savedOffer = offerRepository.save(offer);
-        return OfferMapper.mapOfferToOfferDto(savedOffer);
+        Offer save = offerService.save(offer);
+        OfferResponseDto offerResponseDto = OfferMapper.mapOfferToOfferResponseDto(save);
+        return offerResponseDto;
     }
 
     public List<OfferResponseDto> findAllOffers() {
@@ -35,5 +37,13 @@ public class OfferFacade {
     public List<OfferResponseDto> fetchNewOffersNotInDb() {
         return offerService.fetchNewOffersNotInDb().stream()
                 .map(OfferMapper::mapOfferToOfferResponseDto).toList();
+    }
+
+    public OfferResponseDto partiallyUpdateOffer(OfferDto offerDto, String id) {
+        return offerUpdater.partiallyUpdateOffer(offerDto, id);
+    }
+
+    public OfferResponseDto updateWholeOffer(OfferDto offerDto, String id) {
+        return new OfferResponseDto("Not implemented yet", null, null, null, null);
     }
 }
