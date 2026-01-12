@@ -1,10 +1,12 @@
 package com.jobfinder.infrastructure.offer;
 
+import com.jobfinder.domain.offer.OfferDuplicateException;
 import com.jobfinder.domain.offer.OfferNotFoundException;
 import com.jobfinder.infrastructure.offer.dto.OfferErrorResponseDto;
 import com.mongodb.DuplicateKeyException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,11 +25,12 @@ class OfferRestControllerErrorHandler {
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(DuplicateKeyException.class)
+    @ExceptionHandler(OfferDuplicateException.class)
     @ResponseBody
-    public OfferErrorResponseDto handleDuplicateKeyException(DuplicateKeyException ex) {
-        final String message = "Offer with given url already exists in the database.";
+    public OfferErrorResponseDto handleOfferDuplicate(OfferDuplicateException ex) { // Changed parameter type
+        final String message = ex.getMessage();
         log.error(message);
         return new OfferErrorResponseDto(message, HttpStatus.CONFLICT);
     }
+
 }

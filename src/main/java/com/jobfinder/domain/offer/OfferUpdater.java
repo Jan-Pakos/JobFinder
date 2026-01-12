@@ -26,5 +26,6 @@ class OfferUpdater {
             String newUrl = offerDto.offerUrl();
         }
         Offer offerToSave = Offer.builder().build();
+        return new OfferResponseDto("Not implemented yet", null, null, null, null);
     }
 }

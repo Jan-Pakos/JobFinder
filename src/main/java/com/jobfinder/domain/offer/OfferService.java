@@ -18,6 +18,17 @@ class OfferService {
 
     }
 
+    Offer save(Offer offer) {
+        if(offerExistsByUrl(offer.url())) {
+            throw new OfferDuplicateException("Offer with url " + offer.url() + " already exists");
+        }
+        return offerRepository.save(offer);
+    }
+
+    private boolean offerExistsByUrl(String url) {
+        return offerRepository.existsByUrl(url);
+    }
+
     private List<Offer> fetchOffers() {
         return offerFetcher.getNewOffers().stream().map(
                 OfferMapper::mapFromOfferResponseToOffer
