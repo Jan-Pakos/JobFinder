@@ -4,8 +4,10 @@ import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.login.dto.UserDto;
 import com.jobfinder.domain.login.dto.UserRequestDto;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
+@Component
 public class LoginAndRegisterFacade {
 
     private final UserRepository userRepository;

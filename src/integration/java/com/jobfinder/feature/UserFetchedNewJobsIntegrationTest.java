@@ -14,10 +14,10 @@ import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements SampleJobOffersJsonBodies {
 
@@ -46,6 +46,27 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
 
         // 3. User tried to get a JWT token by making POST request to /token and the system returned UNAUTHORIZED 401
+        // given && when
+        ResultActions userPostRequest = mockMvc.perform(post("/token").content(
+                """
+                        {
+                            "username": "user1",
+                            "password": "password1"
+                        }
+                        
+                        """.trim()).contentType(MediaType.APPLICATION_JSON.getMediaType())
+        );
+        // then
+        userPostRequest.andExpect(status().isUnauthorized())
+                .andExpect(content().json(
+                        """
+                                {
+                                    "message": "Bad Credentials",
+                                    "status": "UNAUTHORIZED"
+                                }
+                                
+                                """.trim()));
+
         // 4. User made a GET request to /offers with no JWT token and the system returned UNAUTHORIZED 401
         // given
         String urlPath = "/offers";
