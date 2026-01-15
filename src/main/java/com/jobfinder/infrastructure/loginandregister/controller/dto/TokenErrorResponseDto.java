@@ -1,4 +1,4 @@
-package com.jobfinder.infrastructure.token.controller.error;
+package com.jobfinder.infrastructure.loginandregister.controller.dto;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatus;

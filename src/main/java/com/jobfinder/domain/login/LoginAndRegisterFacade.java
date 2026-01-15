@@ -4,6 +4,7 @@ import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.login.dto.UserDto;
 import com.jobfinder.domain.login.dto.UserRequestDto;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
@@ -12,9 +13,7 @@ public class LoginAndRegisterFacade {
 
     private final UserRepository userRepository;
 
-    public RegistrationResultDto registerUser(UserRequestDto userRequestDto) {
-        String username = userRequestDto.username();
-        String password = userRequestDto.password();
+    public RegistrationResultDto registerUser(String username, String password) {
         if (userRepository.existsByUsername(username)) {
             throw new UsernameAlreadyExistsException("Username: " + username + " already exists");
         }
@@ -38,7 +37,7 @@ public class LoginAndRegisterFacade {
                         .password(user.password())
                         .build()
         ).orElseThrow(
-                () -> new UserNotFoundException("User with username: " + username + " not found")
+                () -> new UsernameNotFoundException("User with username: " + username + " not found")
         );
     }
 }

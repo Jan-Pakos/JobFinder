@@ -1,5 +1,7 @@
-package com.jobfinder.infrastructure.token.controller;
+package com.jobfinder.infrastructure.loginandregister.controller;
 
+import com.jobfinder.infrastructure.loginandregister.controller.dto.JwtResponseDto;
+import com.jobfinder.infrastructure.loginandregister.controller.dto.LoginRequestDto;
 import com.jobfinder.infrastructure.security.jwt.jwtAuthenticatorFacade;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

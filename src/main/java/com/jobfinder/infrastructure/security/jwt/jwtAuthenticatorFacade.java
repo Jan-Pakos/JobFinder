@@ -1,8 +1,8 @@
 package com.jobfinder.infrastructure.security.jwt;
 
 
-import com.jobfinder.infrastructure.token.controller.JwtResponseDto;
-import com.jobfinder.infrastructure.token.controller.LoginRequestDto;
+import com.jobfinder.infrastructure.loginandregister.controller.dto.JwtResponseDto;
+import com.jobfinder.infrastructure.loginandregister.controller.dto.LoginRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

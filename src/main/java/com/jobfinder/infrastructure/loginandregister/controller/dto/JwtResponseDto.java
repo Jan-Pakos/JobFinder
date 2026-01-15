@@ -1,4 +1,4 @@
-package com.jobfinder.infrastructure.token.controller;
+package com.jobfinder.infrastructure.loginandregister.controller.dto;
 
 import lombok.Builder;
 

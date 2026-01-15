@@ -1,5 +1,6 @@
-package com.jobfinder.infrastructure.token.controller.error;
+package com.jobfinder.infrastructure.loginandregister.controller.error;
 
+import com.jobfinder.infrastructure.loginandregister.controller.dto.TokenErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
