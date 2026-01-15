@@ -1,6 +1,6 @@
 package com.jobfinder.feature;
 
-interface SampleJobOffersJsonBodies {
+public interface SampleJobOffersJsonBodies {
 
     default String bodyWithNoJobOffers() {
         return "[]";

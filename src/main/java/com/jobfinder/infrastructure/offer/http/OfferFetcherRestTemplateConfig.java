@@ -11,12 +11,13 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 
 @Configuration
-class OfferFetcherRestTemplateConfig {
+public class OfferFetcherRestTemplateConfig {
 
     @Bean
     public RestTemplate restTemplate(
             @Value("${offer.fetcher.rest.template.config.connectionTimeout}") long connectionTimeout,
-            @Value("${offer.fetcher.rest.template.config.readTimeout}") long readTimeout) {
+            @Value("${offer.fetcher.rest.template.config.readTimeout}") long readTimeout,
+            RestTemplateErrorHandler restTemplateErrorHandler) {
         return new RestTemplateBuilder()
                 .requestFactory(SimpleClientHttpRequestFactory.class)
                 .connectTimeout(Duration.ofMillis(connectionTimeout))
@@ -25,11 +26,16 @@ class OfferFetcherRestTemplateConfig {
                 .build();
     }
 
-@Bean("offerFetchableRestTemplate")
+    @Bean("offerFetchableRestTemplate")
     public OfferFetchable offerFetchable(
             RestTemplate restTemplate,
             @Value("${offer.fetcher.rest.template.config.uri}") String baseUrl,
             @Value("${offer.fetcher.rest.template.config.port}") String port) {
         return new OffersHttpClient(restTemplate, baseUrl, Integer.parseInt(port));
+    }
+
+    @Bean
+    public RestTemplateErrorHandler restTemplateErrorHandler() {
+        return new RestTemplateErrorHandler();
     }
 }

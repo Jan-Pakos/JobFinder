@@ -10,14 +10,14 @@ import java.io.IOException;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
-class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
+public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse httpResponse) throws IOException {
         final HttpStatus statusCode = (HttpStatus) httpResponse.getStatusCode();
         final HttpStatus.Series series = statusCode.series();
         if (series == SERVER_ERROR) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while using http client");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         } else if (series == CLIENT_ERROR) {
             if (statusCode == HttpStatus.NOT_FOUND) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);

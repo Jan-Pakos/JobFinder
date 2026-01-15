@@ -6,16 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
 @Log4j2
-class OffersHttpClient implements OfferFetchable {
+public class OffersHttpClient implements OfferFetchable {
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -25,7 +27,6 @@ class OffersHttpClient implements OfferFetchable {
     @Override
     public List<OfferResponseDto> getNewOffers() {
         log.info("Fetching offers from external server");
-
         try {
             String url = buildUrl();
             HttpEntity<Void> entity = createHttpEntity();
@@ -38,11 +39,25 @@ class OffersHttpClient implements OfferFetchable {
                     }
             );
 
-            List<OfferResponseDto> offers = response.getBody();
-            return offers != null ? offers : Collections.emptyList();
-        } catch (RestClientException e) {
-            log.error("Error fetching offers: " + e.getMessage());
-            throw e;
+            List<OfferResponseDto> body = response.getBody();
+            if (body == null || body.isEmpty()) {
+                log.error("Response Body was null");
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+            }
+            log.info("Success Response Body Returned: " + body);
+            return body;
+        } catch (HttpClientErrorException.NotFound e) {
+            log.error("Offers not found: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (HttpClientErrorException.Unauthorized e) {
+            log.error("Unauthorized: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        } catch (RestClientException | HttpMessageConversionException | IllegalArgumentException e) {
+            log.error("Error fetching offers: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("Unexpected error fetching offers: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
