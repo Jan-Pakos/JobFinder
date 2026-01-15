@@ -7,6 +7,7 @@ import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import com.jobfinder.infrastructure.offer.scheduler.OffersScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
@@ -71,9 +72,10 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         // given
         String urlPath = "/offers";
         // when
-        ResultActions perform = mockMvc.perform(get(urlPath).contentType(MediaType.APPLICATION_JSON.getMediaType()));
+        ResultActions perform = mockMvc.perform(get(urlPath)
+                .contentType(MediaType.APPLICATION_JSON.getMediaType()));
         // then
-        perform.andExpect(status().isOk());
+        perform.andExpect(status().isForbidden());
 
         // 5. The user made a POST request to /register with username=user1 and password=password1 and the system returned OK 200 and JWTtoken=AAAA.BBBB.CCC
 
