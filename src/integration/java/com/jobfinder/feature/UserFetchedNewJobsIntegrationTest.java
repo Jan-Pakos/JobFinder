@@ -5,7 +5,9 @@ import com.jobfinder.BaseIntegrationTest;
 import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.offer.OfferFetchable;
 import com.jobfinder.domain.offer.dto.OfferResponseDto;
+import com.jobfinder.infrastructure.loginandregister.controller.dto.JwtResponseDto;
 import com.jobfinder.infrastructure.offer.scheduler.OffersScheduler;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -102,7 +105,27 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
         );
 
-        // 6. There are 2 new offers on the external HTTP server
+        // 6. User tried to get a JWT token by making POST request to /token with username=user1 and password=password1 and the system returned OK 200 with JWT token
+        // given && when
+        ResultActions secondUserRegisterRequest = mockMvc.perform(post("/register").content(
+                """
+                        {
+                            "username": "user1",
+                            "password": "password1"
+                        }
+                        
+                        """.trim()).contentType(MediaType.APPLICATION_JSON.getMediaType()));
+        // then
+        ResultActions resultActions = secondUserRegisterRequest.andExpect(status().isOk());
+        String secondResponseBody = secondUserRegisterRequest.andReturn().getResponse().getContentAsString();
+        JwtResponseDto jwtResponseDto = objectMapper.readValue(secondResponseBody, JwtResponseDto.class);
+        String token = jwtResponseDto.token();
+        assertAll(
+                () -> assertThat(jwtResponseDto.username()).isEqualTo("user1"),
+                () -> assertThat(token).matches(Pattern.compile("^([A-Za-z0-9-_=]+\\.)+([A-Za-z0-9-_=])+\\.?$"))
+        );
+
+        // 7. There are 2 new offers on the external HTTP server (4 in total)
         // given && when && then
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
@@ -110,14 +133,14 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
                         .withHeader("Content-Type", "application/json")
                         .withBody(bodyWithTwoJobOffers())));
 
-        // 7. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
+        // 8. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
 
         // given && when
         List<OfferResponseDto> twoNewOffers = offerFetchable.getNewOffers();
 
         // then
         assertThat(twoNewOffers.size()).isEqualTo(2);
-        // 8. User made a GET to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 2 offers with ids: 1000 and 2000
+        // 9. User made a GET to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 2 offers with ids: 1000 and 2000
 
         // given & when
         ResultActions performGetWhenTwoOffers = mockMvc.perform(get("/offers")
@@ -128,7 +151,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
                 .andExpect(jsonPath("$[0].id").value("1000"))
                 .andExpect(jsonPath("$[1].id").value("2000"));
 
-        // 9. User made a GET request to /offers/9999 and the system returned NOT_FOUND 404 with message “Offer with id 9999 not found”
+        // 10. User made a GET request to /offers/9999 and the system returned NOT_FOUND 404 with message “Offer with id 9999 not found”
 
         // given & when
         ResultActions performGetOfferWithExistingId = mockMvc.perform(get("/offers/9999")
@@ -138,7 +161,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         performGetOfferWithExistingId.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Offer with id 9999 not found"));
 
-        // 10. User made GET request to /offers/1000 and the system returned OK 200 with offer with id 1000
+        // 11. User made GET request to /offers/1000 and the system returned OK 200 with offer with id 1000
 
         // given & when
         ResultActions performGetOfferWithId1000 = mockMvc.perform(get("/offers/1000")
@@ -149,7 +172,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
                 .andExpect(jsonPath("$.id").value("1000"));
 
 
-//        11. scheduler ran a 3rd time and made a GET request to the external server and the system added 2 new offers with ids: 3000 and 4000 to the database
+//        12. scheduler ran a 3rd time and made a GET request to the external server and the system added 2 new offers with ids: 3000 and 4000 to the database
 
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
@@ -163,7 +186,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         // then
         assertThat(twoNewOffersWithIds3000and4000.size()).isEqualTo(2);
 
-        // 12. User made a POST request with header “Authorization: Bearer AAAA.BBBB.CCC” and JSON body with offer details to /offers and the system returned OK 200 with the offer with id: 5000
+        // 13. User made a POST request with header “Authorization: Bearer AAAA.BBBB.CCC” and JSON body with offer details to /offers and the system returned OK 200 with the offer with id: 5000
         mockMvc.perform(post("/offers").content(
                         """
                                 {
@@ -175,7 +198,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
                                 
                                 """.trim()).contentType("application/json").header("Authorization", "Bearer AAAA.BBBB.CCC"))
                 .andExpect(status().isCreated());
-//        13. The user made a GET request to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 4 offers with ids: 1000, 2000, 3000, 4000
+//        14. The user made a GET request to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 4 offers with ids: 1000, 2000, 3000, 4000
         // given & when
         ResultActions performGetFor4Offers = mockMvc.perform(get("/offers")
                 .contentType(MediaType.APPLICATION_JSON.getMediaType()));
