@@ -2,6 +2,7 @@ package com.jobfinder.feature;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.jobfinder.BaseIntegrationTest;
+import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.offer.OfferFetchable;
 import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import com.jobfinder.infrastructure.offer.scheduler.OffersScheduler;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -77,16 +79,28 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         // then
         perform.andExpect(status().isForbidden());
 
-        // 5. The user made a POST request to /register with username=user1 and password=password1 and the system returned OK 200 and JWTtoken=AAAA.BBBB.CCC
+        // 5. The user made a POST request to /register with username=user1 and password=password1 and the system returned CREATED 201 and JWTtoken=AAAA.BBBB.CCC
 
-        ResultActions userRegistration = mockMvc.perform(post("/offers").content(
-                """
-                        {
-                            "username": "user1",
-                            "password": "password1"
-                        }
-                        
-                        """.trim()).contentType("application/json"));
+        // given && when
+        ResultActions userRegisterRequest = mockMvc.perform(post("/register").content(
+                        """
+                                {
+                                    "username": "user1",
+                                    "password": "password1"
+                                }
+                                
+                                """.trim()).contentType(MediaType.APPLICATION_JSON.getMediaType()));
+
+        // then
+        userRegisterRequest.andExpect(status().isCreated());
+        String responseBody = userRegisterRequest.andReturn().getResponse().getContentAsString();
+        RegistrationResultDto registrationResultDto = objectMapper.readValue(responseBody, RegistrationResultDto.class);
+        assertAll(
+                () -> assertThat(registrationResultDto.username()).isEqualTo("user1"),
+                () -> assertThat(registrationResultDto.id()).isNotNull(),
+                () -> assertThat(registrationResultDto.password()).isNotNull()
+
+        );
 
         // 6. There are 2 new offers on the external HTTP server
         // given && when && then
