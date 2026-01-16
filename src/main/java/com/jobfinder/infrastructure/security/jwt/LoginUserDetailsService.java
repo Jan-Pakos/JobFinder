@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -15,9 +14,6 @@ import org.springframework.stereotype.Service;
 class LoginUserDetailsService implements UserDetailsService {
 
     private final LoginAndRegisterFacade loginAndRegisterFacade;
-
-    public LoginUserDetailsService(LoginAndRegisterFacade loginAndRegisterFacade) {
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
