@@ -13,9 +13,6 @@ spring:
       password: example
       authentication-database: admin
       auto-index-creation: true
-#  mvc:
-#    pathmatch:
-#      matching-strategy: ANT_PATH_MATCHER
 
 scheduler:
   enabled: true
@@ -32,3 +29,8 @@ offer:
     scheduler:
         fixedDelay: PT3H  # 10800000 = 3 hours in milliseconds
 
+auth:
+  jwt:
+    expirationDays: 30
+    secret: ${JWT_SECRET}
+    issuer: job-offers-backend
