@@ -1,5 +1,6 @@
 package com.jobfinder.feature;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.jobfinder.BaseIntegrationTest;
 import com.jobfinder.domain.login.dto.RegistrationResultDto;
@@ -10,8 +11,8 @@ import com.jobfinder.infrastructure.offer.scheduler.OffersScheduler;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 
@@ -126,13 +127,19 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         );
 
         // 7. There are 2 new offers on the external HTTP server (4 in total)
-        // given && when && then
-        wireMockServer.stubFor(WireMock.get("/offers")
-                .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(bodyWithTwoJobOffers())));
-
+        // given
+        String offersUrl = "/offers";
+        // when
+        ResultActions perform3 = mockMvc.perform(get(offersUrl)
+                .header("Authorization", "Bearer " + token)
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+        );
+        // then
+        MvcResult mvcResult2 = perform3.andExpect(status().isOk()).andReturn();
+        String jsonWithOffers = mvcResult2.getResponse().getContentAsString();
+        List<OfferResponseDto> offers = objectMapper.readValue(jsonWithOffers, new TypeReference<>() {
+        });
+        Assertions.assertThat(offers).isEmpty();
         // 8. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
 
         // given && when
