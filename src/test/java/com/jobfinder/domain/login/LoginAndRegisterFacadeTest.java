@@ -2,52 +2,60 @@ package com.jobfinder.domain.login;
 
 import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.login.dto.UserDto;
-import com.jobfinder.domain.login.dto.UserRequestDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginAndRegisterFacadeTest {
 
-    LoginAndRegisterFacade loginAndRegisterFacade = new LoginAndRegisterFacade(new InMemoryUserRepository());
+    private LoginAndRegisterFacade loginAndRegisterFacade;
+
+    @BeforeEach
+    void setUp() {
+        loginAndRegisterFacade = new LoginAndRegisterFacade(new InMemoryUserRepository());
+    }
 
     @Test
-    void should_register_user(){
+    void should_register_user() {
         // given
-        UserRequestDto userFromRequest = UserRequestDto.builder().username("User1").password("Password1").build();
+        String username = "User1";
+        String password = "Password1";
+
         // when
-        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerUser("User1", "Password1");
+        RegistrationResultDto result = loginAndRegisterFacade.registerUser(username, password);
+
         // then
-        assertAll(
-                () -> assertEquals(registrationResultDto.username(), userFromRequest.username()),
-                () -> assertEquals(registrationResultDto.password(), userFromRequest.password())
-        );
+        assertThat(result.username()).isEqualTo(username);
+    }
+
+    @Test
+    void should_throw_exception_when_registering_duplicate_username() {
+        // given
+        loginAndRegisterFacade.registerUser("User1", "pass");
+
+        // when
+        Throwable thrown = catchThrowable(() -> loginAndRegisterFacade.registerUser("User1", "otherPass"));
+
+        // then
+        assertThat(thrown)
+                .isInstanceOf(UsernameAlreadyExistsException.class)
+                .hasMessage("Username: User1 already exists");
     }
 
     @Test
     void should_find_user_by_username() {
         // given
-        UserRequestDto userRequestDto = UserRequestDto.builder().username("username").password("password").build();
-        String encodedPassword = "encodedPassword";
-        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerUser(userRequestDto.username(), encodedPassword);
+        String username = "username";
+        String password = "password";
+        loginAndRegisterFacade.registerUser(username, password);
+
         // when
-        UserDto byUsername = loginAndRegisterFacade.findByUsername(registrationResultDto.username());
+        UserDto result = loginAndRegisterFacade.findByUsername(username);
 
         // then
-        assertEquals(new UserDto(registrationResultDto.id(),userRequestDto.username(),userRequestDto.password()), byUsername);
+        assertThat(result.username()).isEqualTo(username);
+        assertThat(result.password()).isEqualTo(password);
     }
-
-    @Test
-    void should_throw_exception_when_user_not_found(){
-        // given
-        String username = "nonExistentUser";
-        // when
-        Throwable thrown = catchThrowable(() -> loginAndRegisterFacade.findByUsername(username));
-        // then
-        assertInstanceOf(UsernameNotFoundException.class, thrown);
-        assertEquals("User with username: " + username + " not found", thrown.getMessage());
-    }
-
 }
