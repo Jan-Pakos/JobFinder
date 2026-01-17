@@ -5,7 +5,6 @@ import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,10 +30,11 @@ public class OfferFacadeTest {
         //given
         OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
         //when
-        offerFacade.fetchNewOffersNotInDb();
+        offerFacade.fetchAndSaveOffers();
         //then
         List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
         assertEquals(2, allOffers.size());
+        OfferResponseDto firstOffer = allOffers.get(0);
     }
 
     @Test
@@ -62,26 +62,20 @@ public class OfferFacadeTest {
     @Test
     public void should_save_new_offer_when_it_isnt_in_database() {
         // given
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+        OfferFacade offerFacade = new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
         OfferDto offerDto1 = OfferDto.builder()
                 .title("Java Developer")
-                .company("Tech Solutions")
-                .salary("$80,000 - $120,000")
+                .company("Tech Solutions") // ... fields ...
                 .offerUrl("https://techsolutions.com/careers/java-developer/123")
                 .build();
         offerFacade.saveOffer(offerDto1);
+
         // when
-        OfferDto offerDto2 = OfferDto.builder()
-                .title("Junior Java Developer")
-                .company("Tech Solutions")
-                .salary("$80,000 - $120,000")
-                .offerUrl("https://someurl/3")
-                .build();
-        Set<OfferDto> allOffers = Set.of(offerDto2);
-        offerFacade.fetchNewOffersNotInDb();
+        offerFacade.fetchAndSaveOffers();
+
         // then
-        List<OfferResponseDto> allOffers1 = offerFacade.findAllOffers();
-        assertEquals(3, allOffers1.size());
+        List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+        assertEquals(3, allOffers.size());
     }
 
     @Test
@@ -95,9 +89,12 @@ public class OfferFacadeTest {
                 .offerUrl("https://techsolutions.com/careers/java-developer/123")
                 .build();
         offerFacade.saveOffer(offerDto1);
+
         // when
+        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAndSaveOffers();
 
         // then
+        assertEquals(2, offerResponseDtos.size());
     }
 
 
