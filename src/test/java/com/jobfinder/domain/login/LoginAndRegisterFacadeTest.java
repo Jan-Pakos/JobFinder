@@ -4,6 +4,7 @@ import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.login.dto.UserDto;
 import com.jobfinder.domain.login.dto.UserRequestDto;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,7 @@ public class LoginAndRegisterFacadeTest {
         // given
         UserRequestDto userFromRequest = UserRequestDto.builder().username("User1").password("Password1").build();
         // when
-        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerUser(userFromRequest);
+        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerUser("User1", "Password1");
         // then
         assertAll(
                 () -> assertEquals(registrationResultDto.username(), userFromRequest.username()),
@@ -29,7 +30,8 @@ public class LoginAndRegisterFacadeTest {
     void should_find_user_by_username() {
         // given
         UserRequestDto userRequestDto = UserRequestDto.builder().username("username").password("password").build();
-        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerUser(userRequestDto);
+        String encodedPassword = "encodedPassword";
+        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerUser(userRequestDto.username(), encodedPassword);
         // when
         UserDto byUsername = loginAndRegisterFacade.findByUsername(registrationResultDto.username());
 
@@ -44,7 +46,7 @@ public class LoginAndRegisterFacadeTest {
         // when
         Throwable thrown = catchThrowable(() -> loginAndRegisterFacade.findByUsername(username));
         // then
-        assertInstanceOf(UserNotFoundException.class, thrown);
+        assertInstanceOf(UsernameNotFoundException.class, thrown);
         assertEquals("User with username: " + username + " not found", thrown.getMessage());
     }
 

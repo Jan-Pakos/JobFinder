@@ -23,7 +23,7 @@ public class OffersScheduler {
     @Scheduled(fixedDelayString = "${offer.fetcher.scheduler.fixedDelay}")
     public List<OfferResponseDto> fetchNewOffers() {
         log.info(STARTED_MESSAGE + " at " + new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis()));
-        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchNewOffersNotInDb();
+        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAndSaveOffers();
         log.info(FINISHED_MESSAGE + " at " + new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis()));
         log.info(HOW_MANY_NEW_OFFERS_MESSAGE, offerResponseDtos.size());
         return offerResponseDtos;
