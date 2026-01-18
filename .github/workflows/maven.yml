@@ -26,5 +26,4 @@ jobs:
     - name: Build and Run Tests
       run: mvn clean verify
 
-    - name: Update Dependency Graph
-      uses: advanced-security/maven-dependency-submission-action@v4
+    
