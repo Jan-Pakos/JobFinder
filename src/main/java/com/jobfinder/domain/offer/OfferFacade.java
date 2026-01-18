@@ -3,6 +3,7 @@ package com.jobfinder.domain.offer;
 import com.jobfinder.domain.offer.dto.OfferDto;
 import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.*;
 
@@ -20,6 +21,7 @@ public class OfferFacade {
         return offerResponseDto;
     }
 
+    @Cacheable("allJobOffers")
     public List<OfferResponseDto> findAllOffers() {
         List<Offer> list = offerRepository.findAll().stream().toList();
         return list.stream()
