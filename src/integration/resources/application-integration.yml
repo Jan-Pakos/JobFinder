@@ -4,3 +4,9 @@ offer:
         fixedDelay: PT1S  # every second for integration tests
 scheduler:
   enabled: false
+
+spring:
+  cache:
+    type: none
+    redis:
+        time-to-live: PT10S
