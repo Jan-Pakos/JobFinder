@@ -2,7 +2,6 @@ package com.jobfinder.domain.login;
 
 import com.jobfinder.domain.login.dto.RegistrationResultDto;
 import com.jobfinder.domain.login.dto.UserDto;
-import com.jobfinder.domain.login.dto.UserRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
