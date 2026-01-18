@@ -34,7 +34,7 @@ public class OfferFacade {
         return OfferMapper.mapOfferToOfferResponseDto(offer);
     }
 
-    public List<OfferResponseDto> fetchNewOffersNotInDb() {
+    public List<OfferResponseDto> fetchAndSaveOffers() {
         return offerService.fetchNewOffersNotInDb().stream()
                 .map(OfferMapper::mapOfferToOfferResponseDto).toList();
     }

@@ -19,13 +19,6 @@ public class InMemoryOfferRepository implements OfferRepository {
 
     ConcurrentHashMap<String, Offer> db = new ConcurrentHashMap<>();
 
-//    @Override
-//    public Offer save(Offer offer) {
-//        db.put(counter.incrementAndGet(), offer);
-//        return offer;
-//    }
-
-
     @Override
     public Offer save(Offer entity) {
         if (db.values().stream().anyMatch(offer -> offer.url().equals(entity.url()))) {
