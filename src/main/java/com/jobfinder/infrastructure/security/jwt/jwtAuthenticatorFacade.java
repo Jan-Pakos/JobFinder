@@ -40,7 +40,7 @@ public class jwtAuthenticatorFacade {
     }
 
     private String createToken(User user) {
-        String secretKey = "secretKey"; // Replace with your actual secret key
+        String secretKey = properties.secret();
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         Instant now = LocalDateTime.now(clock).toInstant(ZoneOffset.UTC);
         Instant expiresAt = now.plus(Duration.ofMillis(259200000L));

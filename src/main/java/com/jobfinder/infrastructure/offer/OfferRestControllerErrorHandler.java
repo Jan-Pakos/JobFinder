@@ -16,7 +16,7 @@ class OfferRestControllerErrorHandler {
 
     @ExceptionHandler(OfferNotFoundException.class)
     @ResponseBody
-    public OfferErrorResponseDto handleAllExceptions(Exception ex) {
+    public OfferErrorResponseDto handleAllExceptions(OfferNotFoundException ex) {
         String message = ex.getMessage();
         log.error(message);
         return new OfferErrorResponseDto(message, HttpStatus.NOT_FOUND);

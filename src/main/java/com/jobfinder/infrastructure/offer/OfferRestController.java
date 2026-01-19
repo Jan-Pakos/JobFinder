@@ -30,6 +30,12 @@ public class OfferRestController {
         return ResponseEntity.ok(allOffersResponseDto);
     }
 
+    @GetMapping("/offers/{id}")
+    public ResponseEntity<OfferResponseDto> getOfferById(@PathVariable String id) {
+        OfferResponseDto offerById = offerFacade.findOfferById(id);
+        return ResponseEntity.ok(offerById);
+    }
+
     @PostMapping("/offers")
     public ResponseEntity<OfferResponseDto> postOffer(
             @RequestBody(required = true) @Valid @NotNull OfferRequestDto offerDto) {
