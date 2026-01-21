@@ -52,9 +52,9 @@ public class OfferRestController {
     }
 
     @PatchMapping("/offers/{id}")
-    public ResponseEntity<String> patchOffer(@PathVariable String id, @RequestBody @Valid OfferPatchRequestDto offerRequestDto) {
+    public ResponseEntity<OfferResponseDto> patchOffer(@PathVariable String id, @RequestBody @Valid OfferPatchRequestDto offerRequestDto) {
         OfferDto offerDto1 = OfferMapper.mapOfferPatchRequestDtoToOffer(offerRequestDto);
-        offerFacade.partiallyUpdateOffer(offerDto1,id);
-        return ResponseEntity.ok("Patch request to /offers/{id}");
+        OfferResponseDto offerResponseDto = offerFacade.partiallyUpdateOffer(offerDto1, id);
+        return ResponseEntity.ok(offerResponseDto);
     }
 }
