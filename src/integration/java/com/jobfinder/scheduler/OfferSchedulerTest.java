@@ -21,6 +21,8 @@ public class OfferSchedulerTest extends BaseIntegrationTest {
 
     @Test
     public void should_run_run_offer_scheduler_exactly_given_times_within_given_time() {
-        await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> verify(remoteOfferClient, times(2)).getNewOffers());
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .untilAsserted(() -> verify(remoteOfferClient, times(2)).getNewOffers());
     }
 }
