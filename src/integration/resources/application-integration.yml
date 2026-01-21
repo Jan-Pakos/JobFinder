@@ -1,7 +1,7 @@
 offer:
   fetcher:
     scheduler:
-        fixedDelay: PT1S  # every second for integration tests
+      fixedDelay: PT1S  # every second for integration tests
 scheduler:
   enabled: false # disable scheduling for integration tests EXCEPT for scheduler integration tests
 
@@ -9,4 +9,4 @@ spring:
   cache:
     type: none
     redis:
-        time-to-live: PT10S
+      time-to-live: PT10S

@@ -1,7 +1,6 @@
 package com.jobfinder.domain.offer;
 
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 
@@ -14,14 +13,14 @@ class OfferService {
     List<Offer> fetchNewOffersNotInDb() {
         List<Offer> fetchedOffers = fetchOffers();
         List<Offer> newOffers = filterNotExistingOffers(fetchedOffers);
-        newOffers.forEach(offerRepository::save);
+        offerRepository.saveAll(newOffers);
         return newOffers;
 
     }
 
 
     Offer save(Offer offer) {
-        if(offerExistsByUrl(offer.url())) {
+        if (offerExistsByUrl(offer.url())) {
             throw new OfferDuplicateException("Offer with url " + offer.url() + " already exists");
         }
         return offerRepository.save(offer);

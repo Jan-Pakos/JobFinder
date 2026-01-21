@@ -14,5 +14,5 @@ public record OfferRequestDto(
 
         @NotBlank(message = "You must provide an url")
         String offerUrl
-){
+) {
 }

@@ -81,13 +81,13 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
         // given && when
         ResultActions userRegisterRequest = mockMvc.perform(post("/register").content(
-                        """
-                                {
-                                    "username": "user1",
-                                    "password": "password1"
-                                }
-                                
-                                """.trim()).contentType(MediaType.APPLICATION_JSON.getMediaType()));
+                """
+                        {
+                            "username": "user1",
+                            "password": "password1"
+                        }
+                        
+                        """.trim()).contentType(MediaType.APPLICATION_JSON.getMediaType()));
 
         // then
         userRegisterRequest.andExpect(status().isCreated());
@@ -134,7 +134,8 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         JsonNode root = objectMapper.readTree(jsonWithOffers);
         List<OfferResponseDto> offers = objectMapper.readValue(
                 root.get("offers").traverse(objectMapper),
-                new TypeReference<>() {}
+                new TypeReference<>() {
+                }
         );
         Assertions.assertThat(offers).isEmpty();
         // 8. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
@@ -153,7 +154,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
         // given & when
         ResultActions performGetWhenTwoOffers = mockMvc.perform(get("/offers")
-                        .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON.getMediaType()));
         // then
         performGetWhenTwoOffers.andExpect(status().isOk());

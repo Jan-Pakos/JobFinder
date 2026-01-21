@@ -95,7 +95,7 @@ public class InMemoryOfferRepository implements OfferRepository {
     @Override
     public boolean existsByUrl(String offerUrl) {
         Set<Offer> collect = db.values().stream().filter(
-                offer -> offer.url().equals(offerUrl))
+                        offer -> offer.url().equals(offerUrl))
                 .collect(Collectors.toSet());
         return !collect.isEmpty();
     }

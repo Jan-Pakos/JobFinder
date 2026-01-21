@@ -28,19 +28,19 @@ public class OfferFacadeTest {
     @Test
     public void should_fetch_and_save_two_new_offers_when_theyre_not_in_db() {
         //given
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+        OfferFacade offerFacade = new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
         //when
         offerFacade.fetchAndSaveOffers();
         //then
         List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
         assertEquals(2, allOffers.size());
-        OfferResponseDto firstOffer = allOffers.get(0);
+        OfferResponseDto firstOffer = allOffers.getFirst();
     }
 
     @Test
     public void should_throw_exception_when_offer_not_found() {
         //given
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+        OfferFacade offerFacade = new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
         OfferDto offerDto1 = OfferDto.builder()
                 .title("Java Developer")
                 .company("Tech Solutions")
@@ -50,9 +50,7 @@ public class OfferFacadeTest {
         offerFacade.saveOffer(offerDto1);
         //when
         String invalidId = "INVALID_ID";
-        Exception exception = assertThrows(OfferNotFoundException.class, () -> {
-            offerFacade.findOfferById(invalidId);
-        });
+        Exception exception = assertThrows(OfferNotFoundException.class, () -> offerFacade.findOfferById(invalidId));
         // then
         String expectedMessage = "Offer with id " + invalidId + " not found";
         String actualMessage = exception.getMessage();
@@ -80,7 +78,7 @@ public class OfferFacadeTest {
 
     @Test
     public void should_not_save_new_offer_when_it_already_is_in_database() {
-        OfferFacade offerFacade =  new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
+        OfferFacade offerFacade = new OfferFacadeTestConfiguration(offers).offerFacadeForTests();
         // given
         OfferDto offerDto1 = OfferDto.builder()
                 .title("Java Developer")
@@ -96,7 +94,6 @@ public class OfferFacadeTest {
         // then
         assertEquals(2, offerResponseDtos.size());
     }
-
 
 
 }

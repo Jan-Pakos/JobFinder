@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 class LoginAndRegisterController {
 
-    private final LoginAndRegisterFacade  loginAndRegisterFacade;
+    private final LoginAndRegisterFacade loginAndRegisterFacade;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
