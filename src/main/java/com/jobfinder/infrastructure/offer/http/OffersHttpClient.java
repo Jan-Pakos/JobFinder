@@ -40,7 +40,7 @@ public class OffersHttpClient implements OfferFetchable {
             );
 
             List<OfferResponseDto> body = response.getBody();
-            if (body == null) {
+            if (body == null || body.isEmpty()) {
                 log.error("Response Body was null");
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT);
             }

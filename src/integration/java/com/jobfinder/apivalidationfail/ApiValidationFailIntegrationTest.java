@@ -1,7 +1,7 @@
 package com.jobfinder.apivalidationfail;
 
 import com.jobfinder.BaseIntegrationTest;
-import com.jobfinder.infrastructure.apivalidation.ApiValidationErrorDto;
+import com.jobfinder.infrastructure.offer.apivalidation.ApiValidationErrorDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
