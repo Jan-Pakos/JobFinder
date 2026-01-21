@@ -23,6 +23,7 @@ public class LoginAndRegisterFacade {
 
         User savedUser = userRepository.save(userToSave);
         return RegistrationResultDto.builder()
+                .id(savedUser.id())
                 .username(savedUser.username())
                 .password(savedUser.password())
                 .build();

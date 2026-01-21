@@ -1,6 +1,7 @@
 package com.jobfinder.domain.offer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ class OfferService {
         return newOffers;
 
     }
+
 
     Offer save(Offer offer) {
         if(offerExistsByUrl(offer.url())) {

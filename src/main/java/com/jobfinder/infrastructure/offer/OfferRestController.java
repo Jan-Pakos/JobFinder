@@ -30,6 +30,12 @@ public class OfferRestController {
         return ResponseEntity.ok(allOffersResponseDto);
     }
 
+    @GetMapping("/offers/{id}")
+    public ResponseEntity<OfferResponseDto> getOfferById(@PathVariable String id) {
+        OfferResponseDto offerById = offerFacade.findOfferById(id);
+        return ResponseEntity.ok(offerById);
+    }
+
     @PostMapping("/offers")
     public ResponseEntity<OfferResponseDto> postOffer(
             @RequestBody(required = true) @Valid @NotNull OfferRequestDto offerDto) {
@@ -46,9 +52,9 @@ public class OfferRestController {
     }
 
     @PatchMapping("/offers/{id}")
-    public ResponseEntity<String> patchOffer(@PathVariable String id, @RequestBody @Valid OfferPatchRequestDto offerRequestDto) {
+    public ResponseEntity<OfferResponseDto> patchOffer(@PathVariable String id, @RequestBody @Valid OfferPatchRequestDto offerRequestDto) {
         OfferDto offerDto1 = OfferMapper.mapOfferPatchRequestDtoToOffer(offerRequestDto);
-        offerFacade.partiallyUpdateOffer(offerDto1,id);
-        return ResponseEntity.ok("Patch request to /offers/{id}");
+        OfferResponseDto offerResponseDto = offerFacade.partiallyUpdateOffer(offerDto1, id);
+        return ResponseEntity.ok(offerResponseDto);
     }
 }

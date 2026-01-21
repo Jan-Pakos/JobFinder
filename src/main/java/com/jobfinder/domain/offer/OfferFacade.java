@@ -3,6 +3,7 @@ package com.jobfinder.domain.offer;
 import com.jobfinder.domain.offer.dto.OfferDto;
 import com.jobfinder.domain.offer.dto.OfferResponseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.*;
@@ -14,6 +15,7 @@ public class OfferFacade {
     private final OfferService offerService;
     private final OfferUpdater offerUpdater;
 
+    @CacheEvict(value = "allJobOffers", allEntries = true)
     public OfferResponseDto saveOffer(OfferDto dto) {
         Offer offer = OfferMapper.mapOfferDtoToOffer(dto);
         Offer save = offerService.save(offer);
@@ -36,15 +38,18 @@ public class OfferFacade {
         return OfferMapper.mapOfferToOfferResponseDto(offer);
     }
 
+    @CacheEvict(value = "allJobOffers", allEntries = true)
     public List<OfferResponseDto> fetchAndSaveOffers() {
         return offerService.fetchNewOffersNotInDb().stream()
                 .map(OfferMapper::mapOfferToOfferResponseDto).toList();
     }
 
+    @CacheEvict(value = "allJobOffers", allEntries = true)
     public OfferResponseDto partiallyUpdateOffer(OfferDto offerDto, String id) {
         return offerUpdater.partiallyUpdateOffer(offerDto, id);
     }
 
+    @CacheEvict(value = "allJobOffers", allEntries = true)
     public OfferResponseDto updateWholeOffer(OfferDto offerDto, String id) {
         return new OfferResponseDto("Not implemented yet", null, null, null, null);
     }

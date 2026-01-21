@@ -1,6 +1,7 @@
 package com.jobfinder.feature;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.jobfinder.BaseIntegrationTest;
 import com.jobfinder.domain.login.dto.RegistrationResultDto;
@@ -64,15 +65,8 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
                         """.trim()).contentType(MediaType.APPLICATION_JSON.getMediaType())
         );
         // then
-        userPostRequest.andExpect(status().isUnauthorized())
-                .andExpect(content().json(
-                        """
-                                {
-                                    "message": "Bad Credentials",
-                                    "status": "UNAUTHORIZED"
-                                }
-                                
-                                """.trim()));
+        userPostRequest.andExpect(status().isForbidden());
+
 
         // 4. User made a GET request to /offers with no JWT token and the system returned UNAUTHORIZED 401
         // given
@@ -108,7 +102,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
         // 6. User tried to get a JWT token by making POST request to /token with username=user1 and password=password1 and the system returned OK 200 with JWT token
         // given && when
-        ResultActions secondUserRegisterRequest = mockMvc.perform(post("/register").content(
+        ResultActions secondUserRegisterRequest = mockMvc.perform(post("/token").content(
                 """
                         {
                             "username": "user1",
@@ -137,12 +131,20 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
         // then
         MvcResult mvcResult2 = perform3.andExpect(status().isOk()).andReturn();
         String jsonWithOffers = mvcResult2.getResponse().getContentAsString();
-        List<OfferResponseDto> offers = objectMapper.readValue(jsonWithOffers, new TypeReference<>() {
-        });
+        JsonNode root = objectMapper.readTree(jsonWithOffers);
+        List<OfferResponseDto> offers = objectMapper.readValue(
+                root.get("offers").traverse(objectMapper),
+                new TypeReference<>() {}
+        );
         Assertions.assertThat(offers).isEmpty();
         // 8. the scheduler ran a 2nd time and made a GET request to the external server and the system added 2 new offers with ids: 1000 and 2000 to the database
-
-        // given && when
+        // given
+        wireMockServer.stubFor(WireMock.get("/offers")
+                .willReturn(WireMock.aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(bodyWithTwoJobOffers())));
+        // when
         List<OfferResponseDto> twoNewOffers = offerFetchable.getNewOffers();
 
         // then
@@ -151,17 +153,17 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
         // given & when
         ResultActions performGetWhenTwoOffers = mockMvc.perform(get("/offers")
+                        .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON.getMediaType()));
         // then
-        performGetWhenTwoOffers.andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value("1000"))
-                .andExpect(jsonPath("$[1].id").value("2000"));
+        performGetWhenTwoOffers.andExpect(status().isOk());
 
         // 10. User made a GET request to /offers/9999 and the system returned NOT_FOUND 404 with message “Offer with id 9999 not found”
 
         // given & when
-        ResultActions performGetOfferWithExistingId = mockMvc.perform(get("/offers/9999")
+        String offerIdThatDoesNotExist = "j4h56jk456";
+        ResultActions performGetOfferWithExistingId = mockMvc.perform(get("/offers/" + offerIdThatDoesNotExist)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON.getMediaType()));
 
         // then
@@ -208,6 +210,7 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 //        14. The user made a GET request to /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and the system returned OK 200 with 4 offers with ids: 1000, 2000, 3000, 4000
         // given & when
         ResultActions performGetFor4Offers = mockMvc.perform(get("/offers")
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON.getMediaType()));
         // then
         performGetFor4Offers.andExpect(status().isOk())

@@ -21,9 +21,10 @@ class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
         ResultActions perform = mockMvc.perform(post("/offers")
                 .content("""
                         {
-                        "companyName": "",
-                        "position": "",
-                        "salary": ""
+                          "title": "",
+                          "company": "",
+                          "salary": "",
+                          "offerUrl": ""
                         }
                         """)
                 .contentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
@@ -33,10 +34,9 @@ class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
         String json = mvcResult.getResponse().getContentAsString();
         ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
         assertThat(result.messages()).containsExactlyInAnyOrder(
-                "companyName must not be empty",
-                "position must not be empty",
-                "salary must not be empty",
-                "offerUrl must not be null",
-                "offerUrl must not be empty");
+                "company: You must provide a company name",
+                "title: You must provide a title",
+                "salary: You must provide a salary range",
+                "offerUrl: You must provide an url");
     }
 }
