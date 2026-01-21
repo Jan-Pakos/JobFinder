@@ -13,7 +13,7 @@ class OfferService {
     List<Offer> fetchNewOffersNotInDb() {
         List<Offer> fetchedOffers = fetchOffers();
         List<Offer> newOffers = filterNotExistingOffers(fetchedOffers);
-        offerRepository.saveAll(newOffers);
+        newOffers.stream().forEach(offer -> offerRepository.save(offer));
         return newOffers;
 
     }

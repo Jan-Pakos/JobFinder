@@ -73,7 +73,7 @@ public class OfferFacadeTest {
 
         // then
         List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
-        assertEquals(1, allOffers.size());
+        assertEquals(3, allOffers.size());
     }
 
     @Test

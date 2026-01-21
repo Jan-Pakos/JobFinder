@@ -48,7 +48,8 @@ public class InMemoryOfferRepository implements OfferRepository {
 
     @Override
     public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
-        return List.of();
+        entities.forEach(entity -> db.put(entity.id(), entity));
+        return (List<S>) db.values().stream().toList();
     }
 
     @Override
