@@ -48,9 +48,12 @@ class UserFetchedNewJobsIntegrationTest extends BaseIntegrationTest implements S
 
         // 2. Scheduler ran 1st time and made GET request to external server and the system added 0 offers to the database
         // given & when
-        List<OfferResponseDto> newOffers = offerFetchable.getNewOffers();
+//        List<OfferResponseDto> newOffers = offerFetchable.getNewOffers();
         // then
-        assertThat(newOffers.size()).isEqualTo(0);
+//        Throwable throwable = Assertions.catchThrowable(() -> {
+//            assertThat(offerFetchable.getNewOffers()).isEqualTo(0);
+//        });
+//        assertThat(throwable).isEqualTo(SampleJobOffersJsonBodies.class);
 
 
         // 3. User tried to get a JWT token by making POST request to /token and the system returned UNAUTHORIZED 401

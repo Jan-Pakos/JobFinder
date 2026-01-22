@@ -23,12 +23,18 @@ spring:
 scheduler:
   enabled: true
 
+
 offer:
+  http:
+    client:
+      config:
+        uri: http://ec2-18-194-181-208.eu-central-1.compute.amazonaws.com:5057
+        timeout: 5000
   fetcher:
     rest:
       template:
         config:
-          uri: http://ec2-3-127-218-34.eu-central-1.compute.amazonaws.com:5057
+          uri: http://ec2-18-194-181-208.eu-central-1.compute.amazonaws.com
           port: 5057
           connectionTimeout: 4000
           readTimeout: 4000
@@ -40,3 +46,4 @@ auth:
     expirationDays: 30
     secret: ${JWT_SECRET}
     issuer: job-offers-backend
+
