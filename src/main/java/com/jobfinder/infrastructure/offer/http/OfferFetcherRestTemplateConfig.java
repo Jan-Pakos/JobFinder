@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -14,28 +13,25 @@ import java.time.Duration;
 public class OfferFetcherRestTemplateConfig {
 
     @Bean
-    public RestTemplate restTemplate(
-            @Value("${offer.fetcher.rest.template.config.connectionTimeout}") long connectionTimeout,
-            @Value("${offer.fetcher.rest.template.config.readTimeout}") long readTimeout,
-            RestTemplateErrorHandler restTemplateErrorHandler) {
-        return new RestTemplateBuilder()
-                .requestFactory(SimpleClientHttpRequestFactory.class)
-                .connectTimeout(Duration.ofMillis(connectionTimeout))
-                .readTimeout(Duration.ofMillis(readTimeout))
-                .errorHandler(new RestTemplateErrorHandler())
-                .build();
-    }
-
-    @Bean("offerFetchableRestTemplate")
-    public OfferFetchable offerFetchable(
-            RestTemplate restTemplate,
-            @Value("${offer.fetcher.rest.template.config.uri}") String baseUrl,
-            @Value("${offer.fetcher.rest.template.config.port}") String port) {
-        return new OffersHttpClient(restTemplate, baseUrl, Integer.parseInt(port));
+    public RestTemplateErrorHandler restTemplateResponseErrorHandler() {
+        return new RestTemplateErrorHandler();
     }
 
     @Bean
-    public RestTemplateErrorHandler restTemplateErrorHandler() {
-        return new RestTemplateErrorHandler();
+    public RestTemplate restTemplate(@Value("${offer.http.client.config.connectionTimeout:1000}") long connectionTimeout,
+                                     @Value("${offer.http.client.config.readTimeout:1000}") long readTimeout,
+                                     RestTemplateErrorHandler restTemplateResponseErrorHandler) {
+        return new RestTemplateBuilder()
+                .errorHandler(restTemplateResponseErrorHandler)
+                .setConnectTimeout(Duration.ofMillis(connectionTimeout))
+                .setReadTimeout(Duration.ofMillis(readTimeout))
+                .build();
+    }
+
+    @Bean
+    public OfferFetchable remoteOfferClient(RestTemplate restTemplate,
+                                            @Value("${offer.http.client.config.uri:http://example.com}") String uri,
+                                            @Value("${offer.http.client.config.port:5057}") int port) {
+        return new OffersHttpClient(restTemplate, uri, port);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,59 +21,53 @@ import java.util.List;
 public class OffersHttpClient implements OfferFetchable {
 
     private final RestTemplate restTemplate;
-    private final String baseUrl;
+    private final String uri;
     private final int port;
 
 
     @Override
     public List<OfferResponseDto> getNewOffers() {
-        log.info("Fetching offers from external server");
+        log.info("Started fetching offers using http client");
+        HttpHeaders headers = new HttpHeaders();
+        final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
+        log.info("BEFORE TRY BLOCK");
         try {
-            String url = buildUrl();
-            HttpEntity<Void> entity = createHttpEntity();
-
-            ResponseEntity<List<OfferResponseDto>> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
+            String urlForService = getUrlForService("/offers");
+            final String url = UriComponentsBuilder.fromHttpUrl(urlForService).toUriString();
+            ResponseEntity<List<OfferResponseDto>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
                     new ParameterizedTypeReference<>() {
-                    }
-            );
-
-            List<OfferResponseDto> body = response.getBody();
-            if (body == null || body.isEmpty()) {
+                    });
+            final List<OfferResponseDto> body = response.getBody();
+            log.info("Body from REQUEST: " + body);
+            if (body == null) {
                 log.error("Response Body was null");
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT);
             }
             log.info("Success Response Body Returned: " + body);
             return body;
-        } catch (HttpClientErrorException.NotFound e) {
-            log.error("Offers not found: {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (HttpClientErrorException.Unauthorized e) {
-            log.error("Unauthorized: {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        } catch (RestClientException | HttpMessageConversionException | IllegalArgumentException e) {
-            log.error("Error fetching offers: {}", e.getMessage());
+
+        } catch (ResourceAccessException e) {
+            log.info("catching ResourceAccessException");
+            log.error("Error while fetching offers using http client: " + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            log.error("Unexpected error fetching offers: {}", e.getMessage());
+
+        } catch (HttpClientErrorException e) {
+            log.info("catching HttpClientErrorException");
+            log.error("Client error while fetching offers: " + e.getMessage());
+            throw new ResponseStatusException(e.getStatusCode());
+        }
+        catch (HttpMessageConversionException e) {
+            log.info("catching HttpMessageConversionException");
+            log.error("Error converting message while fetching offers: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (RestClientException e) {
+            log.info("catching RestClientException");
+            log.error("General error while fetching offers using http client: " + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private String buildUrl() {
-        return UriComponentsBuilder
-                .fromUriString(baseUrl)
-                .port(port)
-                .path("/offers")
-                .build()
-                .toUriString();
-    }
-
-    private HttpEntity<Void> createHttpEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(headers);
+    private String getUrlForService(String service) {
+        return uri + ":" + port + service;
     }
 }

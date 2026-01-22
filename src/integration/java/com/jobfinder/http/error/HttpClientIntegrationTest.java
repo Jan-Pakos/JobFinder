@@ -1,6 +1,6 @@
 package com.jobfinder.http.error;
 
-import org.springframework.http.HttpStatus;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
 
     public static final String CONTENT_TYPE_HEADER_KEY = "Content-Type";
-    public static final String APPLICATION_JSON_VALUE = "application/json";
+    public static final String APPLICATION_JSON_CONTENT_TYPE_VALUE = "application/json";
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -31,8 +31,8 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
+                        .withStatus(com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus.SC_OK)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.CONNECTION_RESET_BY_PEER)));
 
         // when
@@ -49,8 +49,8 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
+                        .withStatus(com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus.SC_OK)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.EMPTY_RESPONSE)));
 
         // when
@@ -67,7 +67,7 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus.SC_OK)
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
         // when
         Throwable throwable = catchThrowable(() -> remoteOfferClient.getNewOffers());
@@ -82,8 +82,8 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withStatus(com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus.SC_OK)
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
+                        .withStatus(HttpStatus.SC_OK)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.RANDOM_DATA_THEN_CLOSE)));
 
         // when
@@ -99,10 +99,10 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.NO_CONTENT.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
+                        .withStatus(com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus.SC_NO_CONTENT)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withBody("""
-                                []
+                                [1, 2, 3, 4, 5, 6, 82, 82, 83, 83, 86, 57, 10, 81, 53, 93, 50, 54, 31, 88, 15, 43, 79, 32, 43]
                                 """.trim()
                         )));
 
@@ -119,8 +119,8 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
+                        .withStatus(HttpStatus.SC_OK)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withBody("""
                                 [1, 2, 3, 4, 5, 6, 82, 82, 83, 83, 86, 57, 10, 81, 53, 93, 50, 54, 31, 88, 15, 43, 79, 32, 43]
                                 """.trim()
@@ -140,8 +140,8 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
-                        .withStatus(HttpStatus.NOT_FOUND.value()))
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withStatus(com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus.SC_NOT_FOUND))
         );
 
         // when
@@ -157,8 +157,8 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
         // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_VALUE)
-                        .withStatus(HttpStatus.UNAUTHORIZED.value()))
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withStatus(HttpStatus.SC_UNAUTHORIZED))
         );
 
         // when
