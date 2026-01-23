@@ -12,7 +12,7 @@ import reactor.netty.http.client.HttpClient;
 import java.time.Duration;
 
 @Configuration
-class WebClientConfig {
+public class WebClientConfig {
 
     @Value("${offer.http.client.config.uri}")
     private String baseUri;

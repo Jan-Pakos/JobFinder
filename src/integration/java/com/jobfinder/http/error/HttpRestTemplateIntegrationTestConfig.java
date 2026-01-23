@@ -1,14 +1,8 @@
 package com.jobfinder.http.error;
 
-import com.jobfinder.domain.offer.OfferFetchable;
-import org.springframework.web.client.RestTemplate;
+import com.jobfinder.infrastructure.offer.http.WebClientConfig;
 
-import static com.jobfinder.BaseIntegrationTest.WIRE_MOCK_HOST;
+class HttpRestTemplateIntegrationTestConfig extends WebClientConfig {
 
-class HttpRestTemplateIntegrationTestConfig extends OfferFetcherRestTemplateConfig {
 
-    public OfferFetchable remoteOfferTest(int port, int connectionTimeout, int readTimeout) {
-        final RestTemplate restTemplate = restTemplate(connectionTimeout, readTimeout, restTemplateResponseErrorHandler());
-        return remoteOfferClient(restTemplate, WIRE_MOCK_HOST, port);
-    }
 }
