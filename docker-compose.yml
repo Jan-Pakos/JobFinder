@@ -40,8 +40,8 @@ services:
 
   jobfinder:
     container_name: jobfinder
-#    build: .
-    image: 727646479587.dkr.ecr.us-east-1.amazonaws.com/dockerrei:latest
+    build: .
+#    image: 727646479587.dkr.ecr.us-east-1.amazonaws.com/dockerrei:latest
     restart: always
     ports:
       - '8000:8080'
