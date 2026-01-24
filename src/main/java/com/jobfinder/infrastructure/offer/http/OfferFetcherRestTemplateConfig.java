@@ -18,20 +18,20 @@ public class OfferFetcherRestTemplateConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(@Value("${offer.http.client.config.connectionTimeout:1000}") long connectionTimeout,
-                                     @Value("${offer.http.client.config.readTimeout:1000}") long readTimeout,
+    public RestTemplate restTemplate(@Value("${offer.fetcher.rest.template.config.connectionTimeout}") long connectionTimeout,
+                                     @Value("${offer.fetcher.rest.template.config.readTimeout}") long readTimeout,
                                      RestTemplateErrorHandler restTemplateResponseErrorHandler) {
         return new RestTemplateBuilder()
                 .errorHandler(restTemplateResponseErrorHandler)
-                .setConnectTimeout(Duration.ofMillis(connectionTimeout))
-                .setReadTimeout(Duration.ofMillis(readTimeout))
+                .connectTimeout(Duration.ofMillis(connectionTimeout))
+                .readTimeout(Duration.ofMillis(readTimeout))
                 .build();
     }
 
     @Bean
     public OfferFetchable remoteOfferClient(RestTemplate restTemplate,
-                                            @Value("${offer.http.client.config.uri:http://example.com}") String uri,
-                                            @Value("${offer.http.client.config.port:5057}") int port) {
+                                            @Value("${offer.fetcher.rest.template.config.uri}") String uri,
+                                            @Value("${offer.fetcher.rest.template.config.port}") int port) {
         return new OffersHttpClient(restTemplate, uri, port);
     }
 }

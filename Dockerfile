@@ -1,3 +1,3 @@
-FROM eclipse-termurin:21-jre-alpine
-COPY target/jobfinder.jar /jobfinder.jar
-ENTRYPOINT ["java","-jar","/jobfinder.jar"]
+FROM eclipse-temurin:21
+COPY target/JobFinder-0.0.1-SNAPSHOT.jar /JobFinder.jar
+ENTRYPOINT ["java","-jar","/JobFinder.jar"]
