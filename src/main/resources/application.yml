@@ -12,12 +12,12 @@ spring:
       enabled: true
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: offers
-      username: root
-      password: example
-      authentication-database: admin
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
+      database: ${MONGO_DB_NAME:offers}
+      username: ${MONGO_USER:root}
+      password: ${MONGO_PASSWORD:example}
+      authentication-database: ${MONGO_AUTH_SOURCE:admin}
       auto-index-creation: true
 
 scheduler:
