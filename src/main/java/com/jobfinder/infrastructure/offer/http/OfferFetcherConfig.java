@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 
 @Configuration
-public class OfferFetcherRestTemplateConfig {
+public class OfferFetcherConfig {
 
     @Bean
     public RestTemplateErrorHandler restTemplateResponseErrorHandler() {
