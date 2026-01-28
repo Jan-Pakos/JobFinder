@@ -7,7 +7,7 @@
 
 A robust Spring Boot application built using a **Modular Monolith** approach and **Hexagonal Architecture**. This service handles secure RESTful operations, manages distributed caching with Redis, and utilizes a scheduled task system to synchronize data from external APIs into MongoDB.
 
-It’s live on AWS. I’m working on the React frontend. In the meantime, you can test it like this:
+**IT’S LIVE ON AWS.** I’m working on the React frontend. In the meantime, you can test it like this:
 Go to Postman OR online API testing tool like this: https://reqbin.com
 
 1. In order to access the endpoints you need a bearer token.
@@ -19,6 +19,7 @@ Go to Postman OR online API testing tool like this: https://reqbin.com
    }
 replace both "string" with a username and password of choice.
 Example:
+
 <img width="787" height="372" alt="Screenshot 2026-01-28 at 13 03 34" src="https://github.com/user-attachments/assets/829fe3b7-ef22-4c4c-96a7-c1068b1da86b" />
 
 
@@ -30,12 +31,14 @@ Example:
    }
    copy the token for later use.
    Result:
+   
    <img width="774" height="173" alt="Screenshot 2026-01-28 at 13 04 17" src="https://github.com/user-attachments/assets/cfc2e32e-b18f-4c3f-9726-7a0393bfa216" />
 
 
 Now you can make a GET request to http://ec2-100-53-53-35.compute-1.amazonaws.com:8000/offers
 This will show you all job offers in the system
 Example:
+
 <img width="783" height="323" alt="Screenshot 2026-01-28 at 13 04 58" src="https://github.com/user-attachments/assets/c22d7030-8215-4d71-8c17-fca7f9752d88" />
 
 
