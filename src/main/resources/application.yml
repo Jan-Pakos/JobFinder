@@ -24,14 +24,13 @@ scheduler:
   enabled: true
 
 offer:
+  http:
+    client:
+      uri: http://ec2-18-194-181-208.eu-central-1.compute.amazonaws.com
+      port: 5057
+      connectionTimeout: 4000
+      readTimeout: 4000
   fetcher:
-    rest:
-      template:
-        config:
-          uri: http://ec2-18-194-181-208.eu-central-1.compute.amazonaws.com
-          port: 5057
-          connectionTimeout: 4000
-          readTimeout: 4000
     scheduler:
       fixedDelay: PT3H  # 10800000 = 3 hours in milliseconds
 

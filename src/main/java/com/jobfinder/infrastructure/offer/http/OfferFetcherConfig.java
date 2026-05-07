@@ -1,11 +1,13 @@
 package com.jobfinder.infrastructure.offer.http;
 
 import com.jobfinder.domain.offer.OfferFetchable;
+import io.netty.channel.ChannelOption;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 
@@ -13,25 +15,21 @@ import java.time.Duration;
 public class OfferFetcherConfig {
 
     @Bean
-    public RestTemplateErrorHandler restTemplateResponseErrorHandler() {
-        return new RestTemplateErrorHandler();
+    public OfferFetchable remoteOfferClient(
+            @Value("${offer.http.client.uri}") String uri,
+            @Value("${offer.http.client.port}") int port,
+            @Value("${offer.http.client.connectionTimeout}") int connectionTimeout,
+            @Value("${offer.http.client.readTimeout}") int readTimeout) {
+        return new OffersHttpClient(buildWebClient(uri, port, connectionTimeout, readTimeout));
     }
 
-    @Bean
-    public RestTemplate restTemplate(@Value("${offer.fetcher.rest.template.config.connectionTimeout}") long connectionTimeout,
-                                     @Value("${offer.fetcher.rest.template.config.readTimeout}") long readTimeout,
-                                     RestTemplateErrorHandler restTemplateResponseErrorHandler) {
-        return new RestTemplateBuilder()
-                .errorHandler(restTemplateResponseErrorHandler)
-                .connectTimeout(Duration.ofMillis(connectionTimeout))
-                .readTimeout(Duration.ofMillis(readTimeout))
+    protected WebClient buildWebClient(String uri, int port, int connectionTimeout, int readTimeout) {
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectionTimeout)
+                .responseTimeout(Duration.ofMillis(readTimeout));
+        return WebClient.builder()
+                .baseUrl(uri + ":" + port)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
-    }
-
-    @Bean
-    public OfferFetchable remoteOfferClient(RestTemplate restTemplate,
-                                            @Value("${offer.fetcher.rest.template.config.uri}") String uri,
-                                            @Value("${offer.fetcher.rest.template.config.port}") int port) {
-        return new OffersHttpClient(restTemplate, uri, port);
     }
 }
