@@ -24,7 +24,7 @@ class HttpClientIntegrationTest implements SampleJobOffersJsonBodies {
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort()).build();
 
-    OfferFetchable remoteOfferClient = new HttpWebClientIntegrationTestConfig().remoteOfferTest(wireMockServer.getPort(), 1000, 1000);
+    OfferFetchable remoteOfferClient = new HttpRestClientIntegrationTestConfig().remoteOfferTest(wireMockServer.getPort(), 1000, 1000);
 
     @Test
     void should_throw_exception_500_when_fault_connection_reset_by_peer() {

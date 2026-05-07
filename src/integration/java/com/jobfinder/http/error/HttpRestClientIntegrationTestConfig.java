@@ -6,9 +6,9 @@ import com.jobfinder.infrastructure.offer.http.OffersHttpClient;
 
 import static com.jobfinder.BaseIntegrationTest.WIRE_MOCK_HOST;
 
-class HttpWebClientIntegrationTestConfig extends OfferFetcherConfig {
+class HttpRestClientIntegrationTestConfig extends OfferFetcherConfig {
 
     public OfferFetchable remoteOfferTest(int port, int connectionTimeout, int readTimeout) {
-        return new OffersHttpClient(buildWebClient(WIRE_MOCK_HOST, port, connectionTimeout, readTimeout));
+        return new OffersHttpClient(buildRestClient(WIRE_MOCK_HOST, port, connectionTimeout, readTimeout));
     }
 }
