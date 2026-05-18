@@ -20,7 +20,8 @@ Use Postman or other similar tool.
 replace both "string" with a username and password of choice.
 Example:
 
-<img width="787" height="372" alt="Screenshot 2026-01-28 at 13 03 34" src="https://github.com/user-attachments/assets/829fe3b7-ef22-4c4c-96a7-c1068b1da86b" />
+<img width="526" height="204" alt="Screenshot 2026-05-18 at 16 55 21" src="https://github.com/user-attachments/assets/c8720b1b-753b-4e7a-8d18-59ca741fbb9c" />
+
 
 
 5. Then make a POST request to http://localhost:8000/token
