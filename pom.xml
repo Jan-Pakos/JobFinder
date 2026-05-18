@@ -143,6 +143,12 @@
             <artifactId>spring-data-redis</artifactId>
         </dependency>
 
+        <!-- ACTUATOR -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
 
 
     </dependencies>

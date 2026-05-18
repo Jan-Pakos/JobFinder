@@ -49,7 +49,8 @@ public class SecurityConfig {
                                 "/token",
                                 "/register/**",
                                 "/register",
-                                "/swagger-resources/**"
+                                "/swagger-resources/**",
+                                "/actuator/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
