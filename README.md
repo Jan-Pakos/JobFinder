@@ -7,11 +7,9 @@
 
 A robust Spring Boot application built using a **Modular Monolith** approach and **Hexagonal Architecture**. This service handles secure RESTful operations, manages distributed caching with Redis, and utilizes a scheduled task system to synchronize data from external APIs into MongoDB.
 
-**IT’S LIVE ON AWS.** I’m working on the React frontend. In the meantime, you can test it like this:
 Go to Postman OR online API testing tool like this: https://reqbin.com
 
 1. In order to access the endpoints you need a bearer token.
-2. To http://ec2-100-53-53-35.compute-1.amazonaws.com:8000/register
 3. Send a POST request with a  username and password in a json like this:
    {
   "username": "string",
