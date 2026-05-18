@@ -148,7 +148,7 @@
     </dependencies>
 
     <build>
-<!--        <finalName>jobfinder</finalName>-->
+        <finalName>jobfinder</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
