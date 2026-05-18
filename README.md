@@ -9,6 +9,8 @@ A robust Spring Boot application built using a **Modular Monolith** approach and
 
 ## I included a .env file with environment variables for your convience, I know that this should NOT be done in a real production API ##
 
+Healthcheck: http://localhost:8000/actuator/health
+
 Use Postman or other similar tool.
 
 1. In order to access the endpoints you need a bearer token.
