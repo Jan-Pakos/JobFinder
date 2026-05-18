@@ -7,10 +7,12 @@
 
 A robust Spring Boot application built using a **Modular Monolith** approach and **Hexagonal Architecture**. This service handles secure RESTful operations, manages distributed caching with Redis, and utilizes a scheduled task system to synchronize data from external APIs into MongoDB.
 
-Go to Postman OR online API testing tool like this: https://reqbin.com
+## I included a .env file with environment variables for your convience, I know that this should NOT be done in a real production API ##
+
+Use Postman or other similar tool.
 
 1. In order to access the endpoints you need a bearer token.
-3. Send a POST request with a  username and password in a json like this:
+3. Send a POST request with to http://localhost:8000/register a  username and password in a json like this:
    {
   "username": "string",
   "password": "string"
@@ -18,10 +20,11 @@ Go to Postman OR online API testing tool like this: https://reqbin.com
 replace both "string" with a username and password of choice.
 Example:
 
-<img width="787" height="372" alt="Screenshot 2026-01-28 at 13 03 34" src="https://github.com/user-attachments/assets/829fe3b7-ef22-4c4c-96a7-c1068b1da86b" />
+<img width="526" height="204" alt="Screenshot 2026-05-18 at 16 55 21" src="https://github.com/user-attachments/assets/c8720b1b-753b-4e7a-8d18-59ca741fbb9c" />
 
 
-5. Then make a POST request to http://ec2-100-53-53-35.compute-1.amazonaws.com:8000/token
+
+5. Then make a POST request to http://localhost:8000/token
    You will get back a json like this:
    {
   "username": "YOURUSERNAME",
@@ -33,14 +36,14 @@ Example:
    <img width="774" height="173" alt="Screenshot 2026-01-28 at 13 04 17" src="https://github.com/user-attachments/assets/cfc2e32e-b18f-4c3f-9726-7a0393bfa216" />
 
 
-Now you can make a GET request to http://ec2-100-53-53-35.compute-1.amazonaws.com:8000/offers
+Now you can make a GET request to http://localhost:8000/offers
 This will show you all job offers in the system
 Example:
 
 <img width="783" height="323" alt="Screenshot 2026-01-28 at 13 04 58" src="https://github.com/user-attachments/assets/c22d7030-8215-4d71-8c17-fca7f9752d88" />
 
 
-Or make a POST request to http://ec2-100-53-53-35.compute-1.amazonaws.com:8000/offers with json body:
+Or make a POST request to http://localhost:8000/offers with json body:
 {
   "title": "string",
   "company": "string",
