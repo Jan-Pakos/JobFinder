@@ -112,16 +112,3 @@ This project follows **Hexagonal Architecture** (Ports and Adapters) within a **
 *   Maven installed
 
 
-### Accessing the Services
-
-Once the containers are running, you can access the various services at:
-
-| Service | URL | Description |
-| :--- | :--- | :--- |
-| **API API** | `http://localhost:8080` | Main Application |
-| **Swagger UI** | `http://localhost:8080/swagger-ui/index.html` | API Documentation |
-| **MongoExpress** | `http://localhost:8081` | MongoDB GUI Admin |
-| **Redis Commander** | `http://localhost:8082` | Redis GUI Admin |
-
----
-
