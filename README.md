@@ -33,14 +33,16 @@ Example:
    copy the token for later use.
    Result:
    
-   <img width="774" height="173" alt="Screenshot 2026-01-28 at 13 04 17" src="https://github.com/user-attachments/assets/cfc2e32e-b18f-4c3f-9726-7a0393bfa216" />
+   <img width="588" height="421" alt="Screenshot 2026-05-18 at 17 41 44" src="https://github.com/user-attachments/assets/a4f1c396-d7b5-4728-970f-371fe306c455" />
+
 
 
 Now you can make a GET request to http://localhost:8000/offers
 This will show you all job offers in the system
 Example:
 
-<img width="783" height="323" alt="Screenshot 2026-01-28 at 13 04 58" src="https://github.com/user-attachments/assets/c22d7030-8215-4d71-8c17-fca7f9752d88" />
+<img width="585" height="243" alt="Screenshot 2026-05-18 at 17 41 12" src="https://github.com/user-attachments/assets/d6076f09-7446-4290-8d2a-d9aa5803c803" />
+
 
 
 Or make a POST request to http://localhost:8000/offers with json body:
