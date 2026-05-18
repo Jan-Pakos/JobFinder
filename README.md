@@ -10,7 +10,7 @@ A robust Spring Boot application built using a **Modular Monolith** approach and
 Go to Postman OR online API testing tool like this: https://reqbin.com
 
 1. In order to access the endpoints you need a bearer token.
-3. Send a POST request with to [loca](http://localhost:8000/register) a  username and password in a json like this:
+3. Send a POST request with to http://localhost:8000/register) a  username and password in a json like this:
    {
   "username": "string",
   "password": "string"
