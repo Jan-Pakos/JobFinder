@@ -7,7 +7,7 @@
 
 A robust Spring Boot application built using a **Modular Monolith** approach and **Hexagonal Architecture**. This service handles secure RESTful operations, manages distributed caching with Redis, and utilizes a scheduled task system to synchronize data from external APIs into MongoDB.
 
-## I included a .env file with environment variables for your convience, I know that this should NOT be done in a real production API ##
+## I included a .env file with environment variables for your convience, I know that this should NOT be done in a real production API (Especially in a public repo) ##
 
 Healthcheck: http://localhost:8000/actuator/health
 
