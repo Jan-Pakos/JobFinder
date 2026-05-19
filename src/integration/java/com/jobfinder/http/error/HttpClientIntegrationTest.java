@@ -1,4 +1,4 @@
-package com.jobfinder.http.error;
+package java.com.jobfinder.http.error;
 
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import com.github.tomakehurst.wiremock.client.WireMock;
